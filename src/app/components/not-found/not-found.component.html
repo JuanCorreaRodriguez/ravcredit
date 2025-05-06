@@ -1,0 +1,25 @@
+<main class="notFoundCont">
+  <img alt=""
+       class="_login_bg"
+       fill
+       ngSrc="login_bg.webp"
+       priority/>
+
+  <section class="notFundInner">
+
+    <div class="_logoCont">
+      <img alt="" fill ngSrc="logo_rev_credit.webp" priority>
+    </div>
+
+    <mat-card>
+      <div class="InfoNotFound">
+        <h2 class="">Recurso no encontrado</h2>
+        <p>El recuerso al que intentas acceder no existe</p>
+      </div>
+
+      <button [routerLink]="'/dashboard'" class="_btnLogin" mat-flat-button>Ir al dashboard
+      </button>
+    </mat-card>
+
+  </section>
+</main>

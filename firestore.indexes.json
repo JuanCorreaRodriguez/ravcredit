@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "clientAvailable",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "curp",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

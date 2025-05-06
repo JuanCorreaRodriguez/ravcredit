@@ -5,9 +5,208 @@
   <title>Ravcredit</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="./assets/img/rev_credit_letters_color.svg" rel="icon" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400" rel="stylesheet"/>
+
+  <style as="style" rel="preload">
+    @font-face {
+      font-display: swap;
+      font-family: 'playwrite';
+      font-style: normal;
+      font-weight: 500;
+      src: url('./assets/fonts/playwrite_cu.woff2') format('woff2');
+    }
+
+    @font-face {
+      font-display: swap;
+      font-family: 'poppins';
+      font-style: normal;
+      font-weight: 500;
+      src: url('./assets/fonts/poppins_500.woff2') format('woff2');
+    }
+
+    @font-face {
+      font-display: swap;
+      font-family: 'poppins';
+      font-style: normal;
+      font-weight: 700;
+      src: url('./assets/fonts/poppins_700.woff2') format('woff2');
+    }
+
+    :root {
+      --globalTextFamily: "poppins", sans-serif;
+      --globalRadius: 1rem;
+      --shadow: #181818e0;
+      --globalBgBlur: #f3f3f357;
+      --globalBgBlur: #f3f3f357;
+      --colorP: #b5b5b5;
+      --colorIcons: #636363;
+      --primary: #F73923;
+      --primary2: rgba(135, 0, 255, 0.1);
+      --active: #FF9800;
+      --complete: #4CAF50;
+      --canceled: #F44336;
+      --blocked: #F44336;
+      --clearBlue: rgba(0, 102, 255, 0.1);
+      --clearRed: rgba(231, 66, 44, 0.1);
+      --clearGreen: rgba(76, 175, 80, 0.1);
+      --clearOrange: rgba(255, 152, 0, 0.1);
+    }
+
+    .dark-theme {
+
+      --globalBg: #141718;
+      --globalBox: #232627;
+      --globalBoxBlur: rgba(35, 38, 39, 0.5);
+      --globalToolbar: rgba(20, 23, 24, 0.6);
+      --globalField: #272727;
+      --globalField2: rgba(39, 39, 39, 0.4);
+      /*--colorIcons: #6C7275;*/
+      --colorIcons: #636363;
+      --colorIcons2: #2b2b2b;
+      --colorText: #d3d3d3;
+      --colorP: #848484;
+      --shadow: rgba(0, 0, 0, 0.91);
+      --globalBgBlur: rgba(20, 23, 24, 0.55);
+      --mainBackground: #303030;
+
+      --globalBgBlurLine: #2b2b2ba6;
+      --colorThumbHover: #838383;
+      --colorThumb: #3f3f3f;
+      --colorBW: #f8f8f8;
+
+      --blueBox: #1B1F33;
+      --blueBoxBorder: #2d3456;
+
+      --opacityFloor: .5;
+      --opacityHead: .99;
+      --opacityNums: .45;
+
+      --cardPortfolio: rgba(24, 24, 27, 0.5);
+      --cardPortfolioB: rgba(147, 147, 147, 0.1);
+
+      --cardBody: rgba(24, 24, 27, 0.5);
+
+    }
+
+    .light-theme {
+      --primary: #9575CD;
+      --accent: #673AB7;
+
+      --globalBg: #f0f0f0;
+      --globalBox: #ffffff;
+      --globalBoxBlur: rgba(255, 255, 255, 0.5);
+      --globalToolbar: rgba(240, 240, 240, 0.6);
+      --globalField: #e3e3e3;
+      --globalField2: rgba(227, 227, 227, 0.4);
+      /*--colorIcons: #505050;*/
+      --colorIcons: #a1a1a1;
+      --colorIcons2: #e5e5e5;
+      --colorText: #222223;
+      --colorP: #818181;
+      --shadow: #8a8a8a6b;
+      --globalBgBlur: rgba(240, 240, 240, 0.5);
+      --mainBackground: #ffffff;
+
+      --globalBgBlurLine: #f3f3f349;
+      --colorThumbHover: #a8a8a8;
+      --colorThumb: #c4c4c4;
+      --colorBW: #141718;
+
+      --blueBox: rgba(133, 150, 245, 0.85);
+      --blueBoxBorder: rgba(103, 118, 197, 0.65);
+
+      --opacityFloor: .15;
+      --opacityHead: .55;
+      --opacityNums: .75;
+
+      --cardPortfolio: #ffffff;
+      --cardPortfolioB: rgba(110, 110, 110, 0.2);
+
+      --cardBody: rgba(24, 24, 27, 0.25);
+    }
+
+    html, body {
+      overflow-x: auto;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 100% !important;
+      box-sizing: border-box;
+      font-family: var(--globalTextFamily), sans-serif !important;
+    }
+
+    body {
+      background: var(--globalBg);
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 100% !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 2px;
+      height: 2px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--globalBg) !important;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary) !important;
+      border-radius: 10px !important;
+      margin-right: 2px !important;
+      transition: ease-in-out 0.5s;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--colorThumbHover);
+      transition: ease-in-out 0.5s;
+    }
+
+    h1, h2, h3, h4, h5, p, label, span, h6 {
+      margin: 0 !important;
+      padding: 0 !important;
+      letter-spacing: 0 !important;
+      font-weight: 500;
+      font-family: var(--globalTextFamily), sans-serif !important;
+      color: var(--colorText);
+    }
+
+    p {
+      color: var(--colorP) !important;
+      font-weight: 500;
+      font-size: 13px !important;
+    }
+
+    .gBox {
+      background-color: var(--globalBox) !important;
+      box-shadow: 0 0 8px var(--shadow) !important;
+      backdrop-filter: blur(36px);
+      padding: 1em;
+      border: 0 solid transparent;
+      border-radius: var(--globalRadius);
+      z-index: 9;
+    }
+
+    .gBoxBlur {
+      background-color: var(--globalBoxBlur);
+      backdrop-filter: blur(36px);
+      padding: 1em;
+      border-radius: var(--globalRadius);
+      z-index: 9;
+    }
+
+    @media (max-width: 760px) {
+      p {
+        font-size: 11px
+      }
+    }
+  </style>
+
 </head>
-<body>
+<body class="mat-typography">
   <app-root></app-root>
 </body>
 </html>

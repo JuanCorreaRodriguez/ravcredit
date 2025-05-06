@@ -1,0 +1,102 @@
+.loginCont {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+._login_bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+}
+
+.loginInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  width: 80vw;
+  height: 100vh;
+  box-sizing: border-box;
+  margin: auto;
+
+  h2, p {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+._logoCont {
+  position: relative;
+  width: 20vw;
+  height: 20vh;
+
+  img {
+    object-fit: contain;
+  }
+}
+
+.formLogin {
+  margin: 1.5rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-mdc-card {
+  width: 25em !important;
+  min-width: 25em !important;
+  max-width: 25em !important;
+}
+
+.mat-mdc-form-field {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+}
+
+._btnLogin {
+  margin: auto !important;
+  justify-self: center !important;
+}
+
+@media (max-width: 767px) {
+  .loginInner {
+    width: 98vw;
+    height: 100vh;
+
+  }
+
+  ._logoCont {
+    width: 45vw;
+    height: 15vh;
+  }
+
+  .formLogin {
+    margin: 1.5rem 0 0 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mat-mdc-card {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+.versionSignIn {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  p {
+    color: var(--colorText) !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+  }
+}

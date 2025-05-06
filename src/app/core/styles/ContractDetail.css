@@ -1,0 +1,120 @@
+.closeAction {
+  display: flex;
+  width: 100%;
+  margin-top: 1rem;
+  justify-content: space-between;
+}
+
+.detailCard:nth-child(1) {
+  grid-area: client
+}
+
+.detailCard:nth-child(2) {
+  grid-area: financ
+}
+
+.detailCard:nth-child(3) {
+  grid-area: device
+}
+
+.detailCard:nth-child(4) {
+  grid-area: addres
+}
+
+.detailCard:nth-child(5) {
+  grid-area: actio2
+}
+
+/*.detailCard:nth-child(6) {*/
+/*  grid-area: actio2*/
+/*}*/
+
+.DetailContGrid {
+  padding: 1rem 0 !important;
+  width: 100%;
+  display: grid;
+  gap: .15rem;
+  grid-template-areas:
+    "client financ device device"
+    "client financ device device"
+    "client financ addres addres"
+    "client financ addres addres";
+}
+
+.DetailContGridTable {
+  grid-template-areas:
+    "client financ actio2 actio2"
+    "client financ device device"
+    "client financ device device"
+    "client financ addres addres"
+    "client financ addres addres"
+}
+
+.detailCard {
+  border-radius: calc(var(--globalRadius) / 2) !important;
+  background: white !important;
+  padding: .5rem !important;
+  box-sizing: border-box;
+}
+
+.formCopy {
+  cursor: pointer;
+}
+
+h5, .innerH5 {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: .25rem;
+  justify-content: space-between;
+
+  mat-icon {
+    font-size: 18px !important;
+  }
+}
+
+.pausedContract {
+  color: var(--colorIcons) !important;
+  opacity: .65;
+}
+
+.detailActionNot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.DetailContGridPayments {
+  padding: 1rem 0 !important;
+  width: 100%;
+  display: grid;
+  gap: .5rem;
+  grid-template-areas:
+    "client financ";
+}
+
+.barCodeCont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.detailPays {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.paymentsHeads {
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+
+  .DetailContGrid {
+    overflow-x: scroll;
+    width: 65rem !important;
+  }
+
+}

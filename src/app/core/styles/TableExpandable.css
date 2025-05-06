@@ -1,0 +1,51 @@
+
+table {
+  width: 100%;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+  /*text-transform: capitalize;*/
+}
+
+.expandable-detail {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.contractPag {
+  width: 94%;
+  margin: 1.5rem auto 0 auto;
+}
+
+.tableContracts {
+  margin-top: calc(var(--mat-toolbar-mobile-height) + 1rem);
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+}
+
+.detailCard {
+  background: white !important;
+}
+
+@media (max-width: 767px) {
+  .tableContracts {
+    width: 65rem !important;
+    min-width: 65rem !important;
+    overflow-x: auto !important;
+  }
+}

@@ -1,0 +1,55 @@
+<main class="loginCont">
+  <img alt=""
+       class="_login_bg"
+       fill
+       ngSrc="login_bg.webp"
+       priority/>
+
+  <section class="loginInner">
+
+    <div class="_logoCont">
+      <img alt="" fill ngSrc="logo_rev_credit.webp" priority>
+    </div>
+
+    <mat-card>
+      <h2 class="">Inicio de sesión</h2>
+      <p>Panel de administración</p>
+
+      <form [formGroup]="formLogin()" class="formLogin">
+        <mat-form-field>
+          <mat-label>Usuario...</mat-label>
+          <input formControlName="username" matInput required>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Escribe tu contraseña...</mat-label>
+          <input [type]="hide() ? 'password' : 'text'" formControlName="password" matInput required/>
+          <button
+            (click)="clickEvent($event)"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()"
+            mat-icon-button
+            matSuffix
+          >
+            <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        @if (logInStatus() != eLoginStatus.CHECKING) {
+          <button class="_btnLogin" mat-flat-button (click)="loginAction()" [disabled]="!formLogin().valid">Continuar
+          </button>
+        }
+
+        @if (logInStatus() == eLoginStatus.CHECKING) {
+          <mat-spinner class="_btnLogin" [strokeWidth]="3" [diameter]="20"></mat-spinner>
+        }
+
+      </form>
+    </mat-card>
+
+  </section>
+
+  <div class="versionSignIn">
+    <p>v {{ adminPlatform }}</p>
+  </div>
+</main>

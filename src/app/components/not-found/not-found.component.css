@@ -1,0 +1,61 @@
+.loginCont {
+  position: relative;
+  height: 100vh;
+  max-height: 100vh;
+  width: 100vw;
+}
+
+._login_bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  opacity: .25;
+}
+
+.notFundInner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  flex-direction: column;
+  width: 50vw;
+  height: 100vh;
+  margin: 0 auto !important;
+  box-sizing: border-box;
+  padding: .5rem 5rem;
+
+  h2, p {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+._logoCont {
+  position: relative;
+  width: 20vw;
+  height: 20vh;
+
+  img {
+    object-fit: contain;
+  }
+}
+
+._btnLogin {
+  margin: 2.55rem auto auto auto !important;
+  justify-self: center !important;
+}
+
+.InfoNotFound {
+  h2, p {
+    width: 100%;
+    text-align: center !important;
+  }
+}
+
+.mat-mdc-card {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+}

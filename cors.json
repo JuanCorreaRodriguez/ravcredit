@@ -1,0 +1,16 @@
+[
+  {
+    "origin": [
+      "http://localhost:4200/",
+      "https://localhost:4200/",
+      "https://app.ravcredit.com/",
+      "https://us-central1-ravcredit-2b079.cloudfunctions.net/"
+    ],
+    "method": [
+      "PUT",
+      "GET",
+      "POST"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]
