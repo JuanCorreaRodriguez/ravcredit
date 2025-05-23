@@ -1,0 +1,51 @@
+<app-sub-toolbar [title]="'Transferencia (SPEI)'"/>
+<main class="minHeight minHeightToolbar">
+
+  <mat-card class="globalCard cardReference">
+    <h4 class="subTitles">DynamiCore</h4>
+
+    <h4 class="resumeReferences">Realiza los pagos de tu crédito mediante transferencia bancaria</h4>
+    <h4 class="resumeReferences">Haz tu pago de ${{ contract().financial.weeklyPayment }} MXN a la siguiente cuenta</h4>
+
+    <div>
+      <h2 (click)="copyClipboard(contract().financial.clabe!)" class="refCode">{{ contract().financial.clabe }}</h2>
+      <p class="resumeReferences">Toca el número de cuenta CLABE para copiarla</p>
+    </div>
+
+    @if (nextPayment != '') {
+      <h4 class="resumeReferences">Fecha del siguiente pago</h4>
+      <h4 class="resumeReferences txtReferences">{{ nextPayment }}</h4>
+    }
+
+  </mat-card>
+
+  <div class="mt015">
+    <h4>Realizar una transferencia con cuenta CLABE es rápido y seguro. Sigue estos sencillos pasos para realizar el
+      pago de tu crédito.</h4>
+
+    <ul>
+      <li><h4>Abre la app de tu banco.</h4></li>
+      <li><h4>Selecciona la opción de transferencia: Dentro del menú principal, busca y toca la opción de
+        'Transferencias' o 'Pagos'</h4></li>
+      <li><h4>Elige el tipo de transferencia: Selecciona 'Transferencia a CLABE' o 'Transferencia interbancaria'.</h4>
+      </li>
+      <li><h4>Ingresa los datos del destinatario</h4></li>
+
+      <ul>
+        <li><h4>Número CLABE: Escribe el número CLABE (18 dígitos). Asegúrate de que esté correcto para evitar
+          errores. Puedes dar click o pulsar sobre la cuenta CLABE para copiarla</h4>
+        </li>
+      </ul>
+
+      <li><h4>Monto y concepto</h4></li>
+      <ul>
+        <li><h4>Especifica la cantidad de tu pago correspondiente ($500.13 MXN)</h4></li>
+      </ul>
+
+      <li><h4>Por favor realice su pago antes de las 5:00 p.m. CST del día de la fecha de pago correspondiente para
+        asegurarse de que su equipo permanezca desbloqueado</h4></li>
+      <li><h4>Contactenos si tiene dudas o preguntas</h4></li>
+    </ul>
+  </div>
+
+</main>

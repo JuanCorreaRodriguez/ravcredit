@@ -254,7 +254,7 @@ export interface IDCAccountConfig {
 }
 
 export interface IDCAccount {
-  id: number,
+  id: number | string,
   group: number,
   company: number,
   client: number,
@@ -565,29 +565,29 @@ export interface IDCTransaction {
   data: [number, { transaction: string }];
 }
 
-// export const cIDCCharge: IDCCharge = {
-//   barcode_url: "",
-//   currency: "",
-//   expires_at: 0,
-//   object: "",
-//   quantity: 0,
-//   reference: "",
-//   service_name: "",
-//   store_name: "",
-//   type: "",
-//   unit_price: 0
-// }
-//
-// export const cIDCGeneratedReference : IDCGeneratedReference = {
-//   account: 0,
-//   active: 0,
-//   amount: 0,
-//   channel: "",
-//   charge: cIDCCharge,
-//   company: 0,
-//   id: "",
-//   operation: 0
-// }
+export const cIDCCharge: IDCCharge = {
+  barcode_url: "",
+  currency: "",
+  expires_at: 0,
+  object: "",
+  quantity: 0,
+  reference: "",
+  service_name: "",
+  store_name: "",
+  type: "",
+  unit_price: 0
+}
+
+export const cIDCGeneratedReference: IDCGeneratedReference = {
+  account: 0,
+  active: 0,
+  amount: 0,
+  channel: "",
+  charge: cIDCCharge,
+  company: 0,
+  id: "",
+  operation: 0
+}
 
 /**
  * Common Factory Dynamic

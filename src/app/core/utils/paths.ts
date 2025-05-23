@@ -1,9 +1,10 @@
 const localApiDev = "http://localhost:3000"
+const localContainerApiDev = "http://localhost:3000"
 const prefix = "/api/v1/"
 const prodApiDev = "https://ravcredit-api-1059462239029.us-central1.run.app"
 const prodApi2 = "https://ravcredit-api-2imgfxveka-uc.a.run.app"
 
-export const ravCreditApi = prodApiDev + prefix
+export const ravCreditApi = localApiDev + prefix
 /* Functions */
 export const notificationsFun = "http://customernotification-2imgfxveka-uc.a.run.app"
 export const testOnRegisterFun = "http://127.0.0.1:5001/ravcredit-2b079/us-central1/onRegister"
@@ -21,7 +22,7 @@ export const OnSendEmail = OnRegisterFu2
 export const ScanPayment = OnScanPayment
 
 export const endPointAuthAdmin = "auth/login-admin"
-export const endPointUserAdmin = "user"
+export const endPointUserAdmin = "auth/login-user"
 
 export const endPointClientAdmin = "client/"
 export const endPointClientAdminAccess = "update-access/"
@@ -37,20 +38,21 @@ export const endPointDynamiCore = "dynamic-core"
 export const endPointDynamiCoreRef = "reference"
 export const endPointDynamiCoreCreate = "create-customer"
 export const endPointDynamiCoreCreateCredit = "create-credit"
-export const endPointDynamiCoreCreatePay = "create-payment"
+export const endPointDynamiCoreCreatePay = "create-payments"
 export const endPointDynamiCoreVerify = "verify-customer"
 
 export const conekta = "conekta"
 export const conektaGetOrders = "get-orders"
 export const conektaCreateOrder = "create-order"
 export const conektaCreateCustomer = "conekta/create-customer"
-// export const conektaCreatePaymentOrder = "conekta/create-payment-order"
+// export const conektaCreatePaymentOrder = "conekta/create-payments-order"
 export const conektaGetCustomer = 'conekta/customer'
 export const passportCreateReference = "passport"
 
 export const endPointContractAdmin = "contracts"
+export const endPointContractByClient = "contracts/by-client"
 export const endPointContractPayments = "contracts/payments"
-export const endPointContractPaymentsDelay = "contracts/payment-delay/"
+export const endPointContractPaymentsDelay = "contracts/payments-delay/"
 export const endPointContractUpload = "contract-upload"
 
 export const endPointCreateBusinessInfoCrete = "business/create-business-info"
@@ -67,7 +69,7 @@ export const ravCreditApiClient = `${ravCreditApi}${endPointClientAdmin}`
 export const ravCreditApiClientCreate = `${ravCreditApi}${endPointClientAdmin}${endPointClientCreateAdmin}`
 
 export const ravCreditApiClientVerifyRavcredit = `${ravCreditApi}${endPointClientAdmin}${endPointCurpVerificationAdmin}`
-export const ravCreditApiClientVerifyDynamic = `${ravCreditApi}${endPointClientDynamic}${endPointCurpVerificationDynamic}`
+// export const ravCreditApiClientVerifyDynamic = `${ravCreditApi}${endPointClientDynamic}${endPointCurpVerificationDynamic}`
 export const ravCreditApiAccountVerifyDynamic = `${ravCreditApi}${endPointClientDynamic}${endPointAccountVerificationDynamic}`
 export const ravCreditApiGetReferenceDynamic = `${ravCreditApi}${endPointClientDynamic}${endPointAccountGetReferenceDynamic}`
 export const ravCreditApiGetTransactions = `${ravCreditApi}${endPointClientDynamic}${endPointAccountTransactions}`
@@ -75,6 +77,7 @@ export const ravCreditApiGetTransactions = `${ravCreditApi}${endPointClientDynam
 export const ravCreditApiClientUpdate = `${ravCreditApi}${endPointClientAdmin}`
 export const ravCreditApiClientUpdateAppAccess = `${ravCreditApi}${endPointClientAdmin}${endPointClientAdminAccess}`
 export const ravCreditApiContract = `${ravCreditApi}${endPointContractAdmin}`
+export const ravCreditApiContractByClient = `${ravCreditApi}${endPointContractByClient}`
 export const ravCreditApiContractPayments = `${ravCreditApi}${endPointContractPayments}`
 export const ravCreditApiContractPaymentsDelay = `${ravCreditApi}${endPointContractPaymentsDelay}`
 export const ravCreditApiContractUpload = `${ravCreditApi}${endPointContractAdmin}/${endPointContractUpload}`

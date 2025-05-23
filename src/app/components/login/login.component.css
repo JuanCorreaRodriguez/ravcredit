@@ -5,6 +5,11 @@
   overflow: hidden;
 }
 
+.h2, p {
+  font-size: 12px !important;
+  color: var(--error) !important;
+}
+
 ._login_bg {
   position: absolute;
   bottom: 0;
@@ -34,6 +39,7 @@
   position: relative;
   width: 20vw;
   height: 20vh;
+  margin-bottom: 2.5rem;
 
   img {
     object-fit: contain;
@@ -92,11 +98,22 @@
   position: absolute;
   bottom: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transform: translate(-50%, -.5rem);
 
-  p {
+  .versionLabel {
     color: var(--colorText) !important;
     font-size: 10px !important;
     font-weight: 500 !important;
   }
+
+  .forgotPass {
+    font-size: 12px !important;
+    margin-bottom: 1rem !important;
+    text-align: center !important;
+  }
 }
+

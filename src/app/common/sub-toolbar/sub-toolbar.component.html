@@ -1,0 +1,18 @@
+<header>
+  <mat-toolbar>
+
+    <button (click)="goBack()"
+            aria-label="Example icon-button with menu icon"
+            class="example-icon"
+            mat-icon-button>
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <h2 [style.view-transition-name]="'titleAnim'" class="titleToolbar">
+      {{ title() }}
+    </h2>
+
+  </mat-toolbar>
+
+  <!--  <div class="toolbar-spacer"></div>-->
+</header>

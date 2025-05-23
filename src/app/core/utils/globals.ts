@@ -1,10 +1,29 @@
 import {gResponse, iSnackBarMessage, oResponse} from "../interfaces/oGlobal";
 import {inject} from "@angular/core";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {oContract} from '../interfaces/oContract';
+import {oClient} from '../interfaces/oClient';
+import {IDCTxnRow} from './UtilDynamiCore';
 
 export const cResponseErrorData: oResponse = {
   data: []
 }
+
+export type RoutingParams = {
+  contract?: oContract,
+  client?: oClient,
+  id?: string,
+  external_id?: string,
+  reference?: string,
+  paymentDynamic?: IDCTxnRow
+}
+
+export enum RouteData {
+  CLIENT, CONTRACT, REFERENCE, ID, EXTERNAL_ID, PAYMENT_DYNAMIC
+}
+
+export const emailContact = "contact@ravcredit.com"
+
 export const cResponseError: gResponse = {
   path: "",
   statusCode: 400,

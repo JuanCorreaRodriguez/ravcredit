@@ -2,15 +2,9 @@ import {EnvironmentInjector, inject, Injectable, runInInjectionContext} from '@a
 import {HttpClient} from '@angular/common/http';
 import {IndexedDbService} from '../indexed-db/indexed-db.service';
 import {cClient} from "../utils/UtilClient";
-import {oContract} from "../interfaces/oContract";
 import {oClient} from "../interfaces/oClient";
 import {catchError, firstValueFrom} from 'rxjs';
-import {
-  ravCreditApiClient,
-  ravCreditApiClientCreate,
-  ravCreditApiClientUpdate, ravCreditApiClientUpdateAppAccess,
-  ravCreditApiClientVerifyRavcredit
-} from '../utils/paths';
+import {ravCreditApiClient, ravCreditApiClientUpdate, ravCreditApiClientVerifyRavcredit} from '../utils/paths';
 import {UtilsHttp} from '../utils/UtilsHttp';
 import {gResponse} from '../interfaces/oGlobal';
 import {dbClientsStore} from '../utils/config';
@@ -28,58 +22,9 @@ export class ClientService {
   ) {
   }
 
-  async initCreateClient(contract: oContract, client: oClient): Promise<oClient> {
-
-    let _client = cClient
-
-    try {
-      if (contract.by == "")
-        contract.by = await this.indexedDbService.dbGetPlatformUser()
-
-      const resClient = await this.createClient(client)
-
-      if (resClient.exists) {
-        return resClient
-      } else {
-        if (!resClient.contract_temporary) await this.catchingError("ID de contrato no generado")
-        if (resClient.id != "") _client = resClient
-      }
-    } catch (err) {
-      await this.catchingError(err)
-    }
-    return _client
-  }
-
-  async createClient(client: oClient) {
-    let c = cClient
-    try {
-      const access_token = await this.indexedDbService.dbGetToken()
-      client.name = client.name.toLowerCase()
-
-      const response = await firstValueFrom(
-        this.httpClient
-          .post(ravCreditApiClientCreate, client, {
-            headers: UtilsHttp.CreateHeadersApi(access_token)
-          })
-          .pipe(catchError(err => {
-              throw this.catchingError(err)
-            })
-          )
-      )
-
-      const gRes = response as gResponse
-      c = gRes.data as oClient
-
-      await this.indexedDbService.dbAddObject(dbClientsStore, c)
-    } catch (err) {
-      await this.catchingError(err)
-    }
-    return c
-  }
-
   async verifyCurpRavcredit(curp: string) {
     try {
-      const access_token = await this.indexedDbService.dbGetToken()
+      const access_token = await this.indexedDbService.GetToken()
       const obj = {
         curp: curp
       }
@@ -103,35 +48,6 @@ export class ClientService {
     }
   }
 
-  async updateClient(client: Partial<oClient>, id?: string) {
-    let c = cClient
-
-    try {
-      if (!id) id = client.id
-
-      const access_token = await this.indexedDbService.dbGetToken()
-
-      const response = await firstValueFrom(
-        this.httpClient
-          .patch(`${ravCreditApiClientUpdate}${id}`, client, {
-            headers: UtilsHttp.CreateHeadersApi(access_token)
-          })
-          .pipe(
-            catchError(err => this.catchingError(err)
-            )
-          )
-      )
-
-      const gRes = response as gResponse
-      c = gRes.data as oClient
-
-      await this.indexedDbService.dbPatchObject<oClient>(dbClientsStore, client)
-    } catch (err) {
-      await this.catchingError(err)
-    }
-    return c
-  }
-
   async updateContractUrl(client: oClient) {
     let c = cClient
 
@@ -139,7 +55,7 @@ export class ClientService {
       const contractUrl = {
         contractUrl: client.contractUrl,
       }
-      const access_token = await this.indexedDbService.dbGetToken()
+      const access_token = await this.indexedDbService.GetToken()
       const response = await firstValueFrom(
         this.httpClient
           .patch(`${ravCreditApiClientUpdate}${client.id}`, contractUrl, {
@@ -153,7 +69,7 @@ export class ClientService {
 
       const gRes = response as gResponse
       c = gRes.data as oClient
-      await this.indexedDbService.updateObjectByID(dbClientsStore, client.id, client)
+      await this.indexedDbService.UpdateObjectById(dbClientsStore, client.id, client)
 
     } catch (err) {
       await this.catchingError(err)
@@ -165,7 +81,7 @@ export class ClientService {
     let client = cClient
 
     try {
-      const access_token = await this.indexedDbService.dbGetToken()
+      const access_token = await this.indexedDbService.GetToken()
       const response = await firstValueFrom(
         this.httpClient.get(ravCreditApiClient + id, {
           headers: UtilsHttp.CreateHeadersApi(access_token)
@@ -177,8 +93,7 @@ export class ClientService {
       const gRes = response as gResponse
       client = gRes.data as oClient
 
-      console.error("getClientById API", client)
-      await this.indexedDbService.dbPatchObject(dbClientsStore, client)
+      await this.indexedDbService.PatchObject(dbClientsStore, client)
 
     } catch (err) {
       await this.catchingError(err)
@@ -199,7 +114,7 @@ export class ClientService {
       if (client.id == "") return "Available"
 
       if (search == undefined)
-        await this.indexedDbService.upsertObjectById(dbClientsStore, client.id, client)
+        await this.indexedDbService.UpsertObjectById(dbClientsStore, client.id, client)
 
 
       return client
@@ -210,79 +125,158 @@ export class ClientService {
     return client
   }
 
-  async getAllClients(access_token: string) {
-    let clients: oClient[] = []
-    try {
-      const response = await firstValueFrom(
-        this.httpClient.get(ravCreditApiClient, {
-          headers: UtilsHttp.CreateHeadersApi(access_token)
-        }).pipe(
-          catchError(err => this.catchingError(err))
-        )
-      )
-
-      const gRes = response as gResponse
-      clients = gRes.data as oClient[]
-
-      if (clients.length > 0)
-        await this.indexedDbService.cleanAll(dbClientsStore)
-
-      await this.indexedDbService.dbAddBuildByStore(dbClientsStore, clients)
-
-    } catch (err) {
-      await this.catchingError(err)
-    }
-    return clients
-  }
-
-  async removeClient(token: string, client: string | undefined): Promise<boolean> {
-    try {
-      await firstValueFrom(
-        this.httpClient.delete(ravCreditApiClient + client, {
-          headers: UtilsHttp.CreateHeadersApi(token)
-        }).pipe(
-          catchError(err => {
-            throw this.catchingError(err)
-          })
-        )
-      )
-      await this.indexedDbService.dbDeleteObjectByID(dbClientsStore, client!)
-      return true
-    } catch (err) {
-      await this.catchingError(err)
-      return false
-    }
-  }
-
-  async updateClientAccess(client: Partial<oClient>, id: string) {
-    let c = cClient
-
-    try {
-      const access_token = await this.indexedDbService.dbGetToken()
-
-      const response = await firstValueFrom(
-        this.httpClient
-          .patch(`${ravCreditApiClientUpdateAppAccess}${id}`, client, {
-            headers: UtilsHttp.CreateHeadersApi(access_token)
-          })
-          .pipe(
-            catchError(err => this.catchingError(err)
-            )
-          )
-      )
-      const gRes = response as gResponse
-      c = gRes.data as oClient
-      // await this.indexedDbService.dbPatchObject<oClient>(dbClientsStore, c)
-    } catch (err) {
-      await this.catchingError(err)
-    }
-    return c
-  }
-
   async catchingError(err: any) {
     runInInjectionContext(this.injector, () => {
       const errorService = inject(ErrorHandlerService)
       errorService.httpError(err)
     })
   }
+
+  // async initCreateClient(contract: oContract, client: oClient): Promise<oClient> {
+  //
+  //   let _client = cClient
+  //
+  //   try {
+  //     if (contract.by == "")
+  //       contract.by = await this.indexedDbService.dbGetPlatformUser()
+  //
+  //     const resClient = await this.createClient(client)
+  //
+  //     if (resClient.exists) {
+  //       return resClient
+  //     } else {
+  //       if (!resClient.contract_temporary) await this.catchingError("ID de contrato no generado")
+  //       if (resClient.id != "") _client = resClient
+  //     }
+  //   } catch (err) {
+  //     await this.catchingError(err)
+  //   }
+  //   return _client
+  // }
+
+  // async createClient(client: oClient) {
+  //   let c = cClient
+  //   try {
+  //     const access_token = await this.indexedDbService.dbGetToken()
+  //     client.name = client.name.toLowerCase()
+  //
+  //     const response = await firstValueFrom(
+  //       this.httpClient
+  //         .post(ravCreditApiClientCreate, client, {
+  //           headers: UtilsHttp.CreateHeadersApi(access_token)
+  //         })
+  //         .pipe(catchError(err => {
+  //             throw this.catchingError(err)
+  //           })
+  //         )
+  //     )
+  //
+  //     const gRes = response as gResponse
+  //     c = gRes.data as oClient
+  //
+  //     await this.indexedDbService.dbAddObject(dbClientsStore, c)
+  //   } catch (err) {
+  //     await this.catchingError(err)
+  //   }
+  //   return c
+  // }
+
+  // async updateClient(client: Partial<oClient>, id?: string) {
+  //   let c = cClient
+  //
+  //   try {
+  //     if (!id) id = client.id
+  //
+  //     const access_token = await this.indexedDbService.dbGetToken()
+  //
+  //     const response = await firstValueFrom(
+  //       this.httpClient
+  //         .patch(`${ravCreditApiClientUpdate}${id}`, client, {
+  //           headers: UtilsHttp.CreateHeadersApi(access_token)
+  //         })
+  //         .pipe(
+  //           catchError(err => this.catchingError(err)
+  //           )
+  //         )
+  //     )
+  //
+  //     const gRes = response as gResponse
+  //     c = gRes.data as oClient
+  //
+  //     await this.indexedDbService.dbPatchObject<oClient>(dbClientsStore, client)
+  //   } catch (err) {
+  //     await this.catchingError(err)
+  //   }
+  //   return c
+  // }
+
+  // async getAllClients(access_token: string) {
+  //   let clients: oClient[] = []
+  //   try {
+  //     const response = await firstValueFrom(
+  //       this.httpClient.get(ravCreditApiClient, {
+  //         headers: UtilsHttp.CreateHeadersApi(access_token)
+  //       }).pipe(
+  //         catchError(err => this.catchingError(err))
+  //       )
+  //     )
+  //
+  //     const gRes = response as gResponse
+  //     clients = gRes.data as oClient[]
+  //
+  //     if (clients.length > 0)
+  //       await this.indexedDbService.cleanAll(dbClientsStore)
+  //
+  //     await this.indexedDbService.dbAddBuildByStore(dbClientsStore, clients)
+  //
+  //   } catch (err) {
+  //     await this.catchingError(err)
+  //   }
+  //   return clients
+  // }
+
+  // async removeClient(token: string, client: string | undefined): Promise<boolean> {
+  //   try {
+  //     await firstValueFrom(
+  //       this.httpClient.delete(ravCreditApiClient + client, {
+  //         headers: UtilsHttp.CreateHeadersApi(token)
+  //       }).pipe(
+  //         catchError(err => {
+  //           throw this.catchingError(err)
+  //         })
+  //       )
+  //     )
+  //     await this.indexedDbService.dbDeleteObjectByID(dbClientsStore, client!)
+  //     return true
+  //   } catch (err) {
+  //     await this.catchingError(err)
+  //     return false
+  //   }
+  // }
+
+  // async updateClientAccess(client: Partial<oClient>, id: string) {
+  //   let c = cClient
+  //
+  //   try {
+  //     const access_token = await this.indexedDbService.dbGetToken()
+  //
+  //     const response = await firstValueFrom(
+  //       this.httpClient
+  //         .patch(`${ravCreditApiClientUpdateAppAccess}${id}`, client, {
+  //           headers: UtilsHttp.CreateHeadersApi(access_token)
+  //         })
+  //         .pipe(
+  //           catchError(err => this.catchingError(err)
+  //           )
+  //         )
+  //     )
+  //     const gRes = response as gResponse
+  //     c = gRes.data as oClient
+  //     // await this.indexedDbService.dbPatchObject<oClient>(dbClientsStore, c)
+  //   } catch (err) {
+  //     await this.catchingError(err)
+  //   }
+  //   return c
+  // }
+
 }

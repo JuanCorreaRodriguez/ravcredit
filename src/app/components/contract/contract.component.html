@@ -1,0 +1,235 @@
+<main class="minHeight">
+
+  <div class="headerContract">
+
+    <h2 class="customerName">{{ client().name | titlecase }}</h2>
+
+    <div class="phoneCont">
+      <img alt="" fill ngSrc="phone5.svg" priority>
+    </div>
+
+  </div>
+
+  <section class="cardsContract">
+
+    <mat-card class="globalCard ssa">
+
+      <div class="rowCard">
+        <h4 class="annotation">Dirección</h4>
+        <h4 class="addressCont"><strong>{{ contract().address.street }} {{ contract().address.ext }}
+          , {{ contract().address.neighbor }}, {{ contract().address.zip }}
+          , {{ contract().address.city }} {{ contract().address.state }}</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Número teléfonico</h4>
+        <h4><strong>{{ client().phone }}</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Correo electrónico</h4>
+        <h4><strong>{{ client().email }}</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">CURP</h4>
+        <h4><strong>{{ client().curp }}</strong></h4>
+      </div>
+
+
+    </mat-card>
+
+    <h4 class="globalWidth globalSubtitle">Información de crédito</h4>
+
+    <mat-card class="globalCard ssa">
+
+      <div class="rowCard">
+        <h4 class="annotation">Valor del equipo</h4>
+        <h4><strong>${{ GetTotal() }} MXN</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Pago inical</h4>
+        <h4><strong>${{ contract().financial.initial }} MXN</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Plazo</h4>
+        <h4><strong>{{ contract().financial.deadlines.weeks }} semanas</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Pago Semenal</h4>
+        <h4><strong>${{ contract().financial.weeklyPayment }} MXN</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Proveedor de pago</h4>
+        <h4><strong>{{ contract().financial.provider }}</strong></h4>
+      </div>
+
+    </mat-card>
+
+    @if (businessConfig().downloadsClient) {
+      <mat-card class="globalCard ssa mt010">
+
+        <div class="rowCard">
+          <div>
+            <h4>Contrato PDF</h4>
+          </div>
+          <mat-icon (click)="initDownload()">open_in_new</mat-icon>
+        </div>
+
+      </mat-card>
+    }
+
+    <h4 class="globalWidth globalSubtitle">Información del dispositivo</h4>
+
+    <mat-card class="globalCard ssa mt010">
+
+      <div class="rowCard">
+        <h4 class="annotation">Equipo</h4>
+        <h4><strong>{{ contract().device.device }}</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">IMEI</h4>
+        <h4><strong>{{ contract().device.IMEI }}</strong></h4>
+      </div>
+
+      @if (contract().device.id) {
+        <mat-divider/>
+
+        <div class="rowCard">
+          <h4 class="annotation">Id</h4>
+          <h4><strong>{{ contract().device.id }}</strong></h4>
+        </div>
+      }
+    </mat-card>
+
+    <h4 class="globalWidth globalSubtitle">Información de Ravcredit</h4>
+
+    <mat-card class="globalCard ssa mt010">
+
+      <div class="rowCard">
+        <h4 class="annotation">Dirección</h4>
+        <h4 class="addressCont"><strong>Av. Benito Juarez Centro N°101, CP 25084 Monterrey Nuevo Leon</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Correo electrónico</h4>
+        <h4><strong>{{ emailContact }}</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Teléfono(s)</h4>
+        <h4><strong>{{ phoneContact }}</strong></h4>
+      </div>
+
+    </mat-card>
+
+    <h4 class="globalWidth globalSubtitle">Nuestros horarios</h4>
+
+    <mat-card class="globalCard ssa mt010">
+
+      @if (businessInfo().schedule!.monday) {
+        <div class="rowCard">
+          <h4 class="annotation">Lunes</h4>
+          <h4><strong>{{ GetFormatedTime(businessInfo().schedule!.monday!.open!) }}
+            -  {{ GetFormatedTime(businessInfo().schedule!.monday.close!) }}</strong>
+          </h4>
+        </div>
+
+        <mat-divider/>
+      }
+      @if (businessInfo().schedule!.tuesday) {
+        <div class="rowCard">
+          <h4 class="annotation">Martes</h4>
+          <h4><strong>{{ GetFormatedTime(businessInfo().schedule!.tuesday!.open!) }}
+            -  {{ GetFormatedTime(businessInfo().schedule!.tuesday.close!) }}</strong>
+          </h4>
+        </div>
+        <mat-divider/>
+      }
+      @if (businessInfo().schedule!.wednesday) {
+        <div class="rowCard">
+          <h4 class="annotation">Miércoles</h4>
+          <h4><strong>{{ GetFormatedTime(businessInfo().schedule!.wednesday!.open!) }}
+            -  {{ GetFormatedTime(businessInfo().schedule!.wednesday.close!) }}</strong>
+          </h4>
+        </div>
+
+        <mat-divider/>
+      }
+      @if (businessInfo().schedule!.thursday) {
+        <div class="rowCard">
+          <h4 class="annotation">Jueves</h4>
+          <h4><strong>{{ GetFormatedTime(businessInfo().schedule!.thursday!.open!) }}
+            -  {{ GetFormatedTime(businessInfo().schedule!.thursday.close!) }}</strong>
+          </h4>
+        </div>
+
+        <mat-divider/>
+      }
+      @if (businessInfo().schedule!.friday) {
+        <div class="rowCard">
+          <h4 class="annotation">Viernes</h4>
+          <h4><strong>{{ GetFormatedTime(businessInfo().schedule!.friday!.open!) }}
+            -  {{ GetFormatedTime(businessInfo().schedule!.friday.close!) }}</strong>
+          </h4>
+        </div>
+
+        <mat-divider/>
+      }
+      @if (businessInfo().schedule!.saturday) {
+        <div class="rowCard">
+          <h4 class="annotation">Sábado</h4>
+          <h4><strong>{{ GetFormatedTime(businessInfo().schedule!.saturday!.open!) }}
+            -  {{ GetFormatedTime(businessInfo().schedule!.saturday.close!) }}</strong>
+          </h4>
+        </div>
+
+        <mat-divider/>
+      }
+      @if (businessInfo().schedule!.sunday) {
+        <div class="rowCard">
+          <h4 class="annotation">Domingo</h4>
+          <h4><strong>{{ GetFormatedTime(businessInfo().schedule!.sunday!.open!) }}
+            -  {{ GetFormatedTime(businessInfo().schedule!.sunday.close!) }}</strong>
+          </h4>
+        </div>
+      }
+
+    </mat-card>
+
+    <mat-card class="globalCardClear ssa mt010 pb010">
+
+      <div class="rowCard">
+        <h4>Cerrar sesión</h4>
+        <mat-icon (click)="initSignOut()">logout</mat-icon>
+      </div>
+
+    </mat-card>
+
+  </section>
+</main>

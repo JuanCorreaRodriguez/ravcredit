@@ -1,0 +1,87 @@
+
+.headerHome {
+  padding-top: 2.5rem !important;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 auto;
+  justify-content: center;
+
+  .mat-icon {
+    color: var(--error) !important;
+  }
+}
+
+.homeTitle {
+  text-align: center;
+  font-size: 24px !important;
+  color: var(--error) !important;
+}
+
+.welcomeLabel {
+  width: 100%;
+  font-size: 14px !important;
+  text-align: center !important;
+}
+
+.progressCont {
+  width: 100%;
+  height: 200px;
+  position: relative;
+}
+
+.progressTrack {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+
+  ::ng-deep circle {
+    stroke: #FFD8E480 !important;
+  }
+}
+
+.progressMain {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+.progressCont2 {
+  width: 100%;
+  display: flex;
+  gap: .25rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ssa {
+  margin: 0 auto;
+}
+
+.progressCont3 {
+  gap: 1rem !important;
+}
+
+.progressPays {
+  display: flex;
+  align-items: baseline;
+  flex-direction: row;
+  gap: 0.1rem;
+
+  p {
+    font-size: 13px !important;
+    margin-left: .25rem !important;
+  }
+}
+
+.homeNotsPays {
+  margin-top: .5rem !important;
+}

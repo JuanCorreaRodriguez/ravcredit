@@ -1,29 +1,21 @@
 import {Component, OnDestroy, signal} from '@angular/core';
-import {adminVersion} from '../../core/utils/config';
+import {webAppVersion} from '../../core/utils/config';
 import {LogIn} from '../../core/adapters/LogIn';
 import {eAuthType} from '../../core/interfaces/oLogIn';
 import {eLoginStatus} from '../../core/interfaces/oGlobal';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {NgOptimizedImage} from '@angular/common';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {ReactiveFormsModule} from '@angular/forms';
+import {MatInput, MatLabel} from '@angular/material/input';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatCard} from '@angular/material/card';
 import {MatIcon} from '@angular/material/icon';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-login',
   imports: [
-    MatProgressSpinner,
-    MatButton,
-    NgOptimizedImage,
-    MatFormField,
-    MatLabel,
-    ReactiveFormsModule,
-    MatInput,
-    MatCard,
-    MatIconButton,
-    MatIcon,
+    NgOptimizedImage, MatLabel, MatCard, FormsModule, MatFormFieldModule, MatInput, MatIcon, MatIconButton, MatButton, ReactiveFormsModule, MatProgressSpinner
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -33,7 +25,7 @@ export class LoginComponent extends LogIn implements OnDestroy {
   formLogin = signal(this.getForm)
 
   protected readonly eLoginStatus = eLoginStatus;
-  protected readonly adminPlatform = adminVersion;
+  protected readonly adminPlatform = webAppVersion;
 
   constructor() {
     super()
@@ -50,3 +42,5 @@ export class LoginComponent extends LogIn implements OnDestroy {
     }, eAuthType.login)
   }
 }
+
+// jose-juan.correa@outlook.com

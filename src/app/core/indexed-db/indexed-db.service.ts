@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import {IDBPDatabase, openDB} from 'idb';import {
+import {Injectable} from '@angular/core';
+import {IDBPDatabase, openDB} from 'idb';
+import {
   dbAuthStore,
   dbBusinessConfig,
   dbBusinessInfo,
@@ -7,6 +8,7 @@ import {IDBPDatabase, openDB} from 'idb';import {
   dbConektaClientsStore,
   dbConektaReferencesStore,
   dbContractsStore,
+  dbDynamicAccountStore,
   dbDynamicReferencesStore,
   dbIndexAuth,
   dbIndexBusiness,
@@ -14,20 +16,22 @@ import {IDBPDatabase, openDB} from 'idb';import {
   dbIndexNotification,
   dbIndexPassportClientsRef,
   dbIndexPayments,
-  dbIndexUsers,
   dbName,
   dbNotificationsStore,
   dbPassportReferencesStore,
   dbPaymentsStore,
-  dbUsersStore,
   dbVersion,
   keyPathCurp,
+  keyPathDynamicReference,
   keyPathId,
-  keyPathReference,
   keyUserID
 } from "../utils/config";
 import {oUser} from '../interfaces/oUser';
 import {oClient} from '../interfaces/oClient';
+import {cTyClientContract, tyClientContract} from '../interfaces/oGlobal';
+import {oContract} from '../interfaces/oContract';
+import {oBusinessConfig, oBusinessInfo} from '../interfaces/oBusiness';
+import {oNotification} from '../interfaces/oNotification';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +43,7 @@ export class IndexedDbService {
   constructor() {
     if (('indexedDB' in window)) {
       this.indexDbStatus = true
-      // this.initDB().then()
+      this.initDB().then()
     } else {
     }
   }
@@ -55,12 +59,12 @@ export class IndexedDbService {
           ).createIndex(dbIndexAuth, dbIndexAuth, {unique: true})
         }
 
-        if (!db.objectStoreNames.contains(dbUsersStore)) {
-          db.createObjectStore(
-            dbUsersStore,
-            {keyPath: "id", autoIncrement: true}
-          ).createIndex(dbIndexUsers, dbIndexUsers, {unique: true})
-        }
+        // if (!db.objectStoreNames.contains(dbUsersStore)) {
+        //   db.createObjectStore(
+        //     dbUsersStore,
+        //     {keyPath: "id", autoIncrement: true}
+        //   ).createIndex(dbIndexUsers, dbIndexUsers, {unique: true})
+        // }
 
         if (!db.objectStoreNames.contains(dbContractsStore)) {
           const storeContract = db.createObjectStore(
@@ -95,13 +99,20 @@ export class IndexedDbService {
           ).createIndex(dbIndexConektaClientsRef, dbIndexConektaClientsRef, {unique: true})
         }
 
+        if (!db.objectStoreNames.contains(dbDynamicAccountStore)) {
+          db.createObjectStore(
+            dbDynamicAccountStore,
+            {keyPath: keyPathId, autoIncrement: false}
+          ).createIndex(keyPathId, keyPathId, {unique: true})
+        }
+
         if (!db.objectStoreNames.contains(dbDynamicReferencesStore)) {
-          const storeConekta = db.createObjectStore(
+          const objectStore = db.createObjectStore(
             dbDynamicReferencesStore,
-            {keyPath: [keyPathId, keyPathReference], autoIncrement: false}
+            {keyPath: [keyPathId, keyPathDynamicReference], autoIncrement: false}
           )
-          storeConekta.createIndex(keyPathId, keyPathId, {unique: true})
-          storeConekta.createIndex(keyPathReference, keyPathReference, {unique: true})
+          objectStore.createIndex(keyPathId, keyPathId, {unique: true})
+          objectStore.createIndex(keyPathDynamicReference, keyPathDynamicReference, {unique: true})
         }
 
         if (!db.objectStoreNames.contains(dbPassportReferencesStore)) {
@@ -155,7 +166,7 @@ export class IndexedDbService {
     return auth;
   }
 
-  getLocalUser() {
+  getLocalUser(): string | null {
     const k = localStorage.getItem(keyUserID)
     return (k)
   }
@@ -168,6 +179,10 @@ export class IndexedDbService {
 
   setLocalStorage(k: string, v: string) {
     localStorage.setItem(k, v)
+  }
+
+  getLocalStorage<T>(k: string) {
+    return localStorage.getItem(k) as T
   }
 
   async dbGetPlatformUser() {
@@ -183,7 +198,7 @@ export class IndexedDbService {
     return auth.name != "" ? auth.name : ""
   }
 
-  async dbGetToken() {
+  async GetToken() {
     const k = this.getLocalUser()
     if (k == null) return ""
 
@@ -197,7 +212,7 @@ export class IndexedDbService {
   }
 
   /************************************************** GENERAL *********************************************************/
-  async dbAddObject<T>(store: string, data: any): Promise<boolean> {
+  async AddObject<T>(store: string, data: T): Promise<boolean> {
     try {
       const db = await openDB(dbName, dbVersion)
       await db.put(store, data)
@@ -207,7 +222,21 @@ export class IndexedDbService {
     }
   }
 
-  async dbPatchObject<T>(store: string, data: any): Promise<T> {
+  async AddAllObjects<T>(store: string, data: T[]): Promise<boolean> {
+    try {
+      const db = await openDB(dbName, dbVersion)
+      const txn = db.transaction(store, "readwrite")
+      const obj = txn.objectStore(store)
+
+      data.forEach(item => obj.put(item))
+      return true
+    } catch (e) {
+      console.error(e)
+      return false
+    }
+  }
+
+  async PatchObject<T>(store: string, data: any): Promise<T> {
     try {
       const db = await openDB(dbName, dbVersion)
       const txn = db.transaction(store, "readwrite")
@@ -221,29 +250,67 @@ export class IndexedDbService {
     }
   }
 
-  async updateObjectByID<T>(store: string, id: string, data: T) {
+  async UpdateObjectById<T>(store: string, id: string, data: T) {
     const db = await openDB(dbName, dbVersion)
     const res = await db.get(store, id) as oClient
 
-    if (res.id != "") await this.dbRemoveObject(dbClientsStore, id)
+    if (res.id != "") await this.RemoveObject(dbClientsStore, id)
 
-    return await this.dbAddObject(store, data)
+    return await this.AddObject(store, data)
   }
 
-  async upsertObjectById<T>(store: string, id: string, data: T) {
+  async UpsertObjectById<T>(store: string, id: string, data: T): Promise<boolean> {
+    try {
+      const db = await openDB(dbName, dbVersion)
+      const res = await db.get(store, id)
 
-    const db = await openDB(dbName, dbVersion)
-    const res = await db.get(store, id)
+      if (res) await this.RemoveObject<T>(store, id)
 
-    if (res) await this.dbRemoveObject<T>(store, id)
+      let e = await db.add(store, data)
+      return e ? true : false
 
-    return await db.add(store, data)
+    } catch (e) {
+      console.log("UpsertObjectById", e)
+      return false
+    }
   }
 
-  async dbGetObject<T>(store: string, data: any): Promise<T> {
+  async GetObject<T>(store: string, data: any): Promise<T> {
     if (!data) return data
     const db = await openDB(dbName, dbVersion)
     return await db.get(store, data) as T
+  }
+
+  async GetDynamicReference<T>(store: string, id: string) {
+    try {
+      const db = await openDB(dbName, dbVersion)
+      const txn = db.transaction(store, "readwrite")
+      const obj = txn.objectStore(store)
+      const index = obj.index(keyPathDynamicReference)
+      const va2 = await index.get(id)
+      return va2 as T
+    } catch (e) {
+      console.error(e)
+      return {} as T
+    }
+  }
+
+  async GetObjectByID<T>(
+    store: string,
+    id: string,
+    primaryKey: string = keyPathId
+  ) {
+    try {
+      const db = await openDB(dbName, dbVersion)
+      const txn = db.transaction(store, "readwrite")
+      const obj = txn.objectStore(store)
+      const index = obj.index(primaryKey)
+      const va2 = await index.get(id)
+      return va2 as T
+    } catch (e) {
+      console.error(e)
+      return {} as T
+    }
   }
 
   async cleanAll<T>(store: string) {
@@ -251,16 +318,16 @@ export class IndexedDbService {
     return await db.clear(store)
   }
 
-  async dbUpdateObject<T>(store: string, data: any) {
+  async UpdateObject<T>(store: string, data: any) {
     const db = await openDB(dbName, dbVersion)
     await db.put(store, data)
   }
 
   async dbAddBuildByStore(store: string, data: any[]) {
     for (const o of data) {
-      const exists = await this.dbGetObject(store, o["id"])
-      if (!exists) await this.dbAddObject(store, o)
-      else await this.dbUpdateObject(store, o)
+      const exists = await this.GetObject(store, o["id"])
+      if (!exists) await this.AddObject(store, o)
+      else await this.UpdateObject(store, o)
     }
   }
 
@@ -284,8 +351,139 @@ export class IndexedDbService {
     }
   }
 
-  async dbRemoveObject<T>(store: string, data: any): Promise<T> {
+  async RemoveObject<T>(store: string, data: any): Promise<T> {
     const db = await openDB(dbName, dbVersion)
     return await db.delete(store, data) as T
+  }
+
+  async GetAllByStore<T>(store: string, index?: string) {
+    const db = await openDB(dbName, dbVersion)
+    return await db.getAll(store) as T
+  }
+
+  /******************** MERGE **************************************/
+
+  // async dbGetAllClientContract(): Promise<tyClientContract[]> {
+  //   const clientContract: tyClientContract[] = []
+  //   const clients = await this.dbGetAllByStore<oClient[]>(dbClientsStore)
+  //   if (clients.length == 0) return []
+  //
+  //   for (let client of clients) {
+  //     const contract = await this.dbGetObject<oContract>(dbContractsStore, client.contract)
+  //     const e = {...client, ...contract}
+  //     // preserve the id value over concat models
+  //     e.id = client.id
+  //     e.status = client.status
+  //     clientContract.push(e)
+  //   }
+  //   return clientContract
+  // }
+
+  /**************** NOTIFICATIONS *********************************/
+
+  async getLocalNotifications(): Promise<oNotification[]> {
+    const _notifications: oNotification[] = await this.GetAllByStore<oNotification[]>(dbNotificationsStore)
+    if (!_notifications) return []
+    return _notifications
+  }
+
+  async updateNotifications(notifications: oNotification[]) {
+    for (const o of notifications) {
+      const exists = await this.GetObject(dbNotificationsStore, o.notification_id)
+      if (!exists) {
+        await this.AddObject(dbNotificationsStore, o)
+      }
+    }
+  }
+
+  /******************** MERGE **************************************/
+
+  async GetClientContract(clientId: string): Promise<tyClientContract> {
+    try {
+
+      let clientContract: tyClientContract = cTyClientContract
+
+      const client = await this.GetObjectByID<oClient>(dbClientsStore, clientId)
+      if (client == undefined) return clientContract
+
+      const contract = await this.GetObjectByID<oContract>(dbContractsStore, client.contract!)
+      if (contract == undefined) return clientContract
+
+      clientContract = {...client, ...contract}
+      clientContract.id = client.id
+      clientContract.status = client.status
+
+      return clientContract
+    } catch (e) {
+      console.log("dbGetClientContract : Catch error \n", e)
+      return cTyClientContract
+    }
+  }
+
+  /****************** BUSINESS INFO *************************************/
+
+  async GetBusinessInfo(): Promise<oBusinessInfo | null> {
+    const config: oBusinessInfo[] = await this.GetAllByStore<oBusinessInfo[]>(dbBusinessInfo)
+
+    if (!config) return null
+
+    return config[0]
+  }
+
+  async UpdateBusinessInfo(config: oBusinessInfo) {
+
+    config.version = "v2024"
+    await this.RemoveObject(dbBusinessInfo, "v2024")
+    await this.AddObject(dbBusinessInfo, config)
+  }
+
+  /****************** BUSINESS CONFIG ************************************/
+
+  async GetBusinessConfig(): Promise<oBusinessConfig | null> {
+    const config: oBusinessConfig[] = await this.GetAllByStore<oBusinessConfig[]>(dbBusinessConfig)
+
+    if (!config) return null
+
+    return config[0]
+  }
+
+  async UpdateBusinessConfig(config: oBusinessConfig) {
+
+    // config.version = "1.0"
+    await this.RemoveObject(dbBusinessConfig, "1.0")
+    await this.AddObject(dbBusinessConfig, config)
+  }
+
+  async SignOut() {
+
+    const k = this.getLocalUser()
+    if (!k) return
+
+    await this.iDb.delete(dbAuthStore, k)
+    this.removeLocalStorage(keyUserID)
+  }
+
+  async deleteLocalDb() {
+    try {
+      const idb = await openDB(dbName, dbVersion)
+      await idb.clear(dbAuthStore)
+      await idb.clear(dbBusinessConfig)
+      await idb.clear(dbBusinessInfo)
+      await idb.clear(dbClientsStore)
+      await idb.clear(dbContractsStore)
+      await idb.clear(dbDynamicReferencesStore)
+      await idb.clear(dbDynamicAccountStore)
+      await idb.clear(dbPaymentsStore)
+      await idb.clear(dbNotificationsStore)
+      await idb.clear(dbPassportReferencesStore)
+      await idb.clear(dbConektaClientsStore)
+      await idb.clear(dbConektaReferencesStore)
+    } catch (e) {
+      console.info(e)
+    }
+  }
+
+  removeLocalStorage(k: string) {
+    localStorage.removeItem(k)
   }
 }

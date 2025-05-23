@@ -1,0 +1,29 @@
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.mat-toolbar {
+  position: fixed;
+  z-index: 999;
+  border-bottom: 1px solid #dadada;
+
+  h2 {
+    font-size: 18px !important;
+    align-items: center;
+    height: 100%;
+    display: flex;
+    margin-left: 1rem !important;
+  }
+}
+
+.itemMenu {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.menuTxtSize {
+  font-size: 13px !important;
+}

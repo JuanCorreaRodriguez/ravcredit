@@ -1,0 +1,73 @@
+<section class="paymentInnerCont">
+  <app-sub-toolbar [title]="'Información de pago'"/>
+
+
+  <section class="paymentInner">
+    <mat-card class="globalCard progressCont2">
+      <h2>
+        Informacion
+      </h2>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Referencia actual</h4>
+        <h4><strong>{{ client().reference }}</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Cuenta CLABE</h4>
+        <h4><strong>{{ contract().financial.clabe }}</strong></h4>
+      </div>
+
+    </mat-card>
+
+    <mat-card class="globalCard">
+      <div class="rowCard">
+        <h4 class="annotation">Balance</h4>
+        <h4><strong>{{ payment()?.amount }} MXN</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <div class="amountCOnt">
+          <h4 class="annotation">Cantidad</h4>
+          @if (payment()?.debit! > 0) {
+            <p class="annotation">Débito</p>
+          } @else if (payment()?.credit! > 0) {
+            <p class="annotation">Crédito</p>
+          }
+          <p></p>
+        </div>
+        <h4><strong>{{ contract().financial.weeklyPayment }} MXN</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Moneda</h4>
+        <h4><strong>MXN</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Fecha</h4>
+        <h4><strong>{{ GetDateTime() | titlecase }}</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Operación</h4>
+        <h4><strong>{{ payment()?.name }}</strong></h4>
+      </div>
+
+    </mat-card>
+
+  </section>
+
+</section>

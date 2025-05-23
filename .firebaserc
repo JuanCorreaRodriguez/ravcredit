@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "ravcredit-2b079"
-  }
+  },
+  "targets": {
+    "ravcredit-2b079": {
+      "hosting": {
+        "app": [
+          "app-6e755"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

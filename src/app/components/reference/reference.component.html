@@ -1,0 +1,23 @@
+<main class="minHeight referenceCont">
+
+  <h3 class="paymentTitle">Selecciona tu forma de pago</h3>
+
+  <div class="optionsRef">
+
+    @if (contract().financial.provider == eProvider.DynamiCore) {
+      <mat-card class="payCont globalCard" (click)="routing('/transfer-bank')">
+        <div class="innerReferences">
+          <mat-icon class="icRefType">account_balance</mat-icon>
+          <h4>Transferencia (SPEI)</h4>
+        </div>
+      </mat-card>
+    }
+
+    <mat-card (click)="routing('/reference/dynamicore')" class="payCont globalCard">
+      <div class="innerReferences ">
+        <mat-icon class="icRefType">payments</mat-icon>
+        <h4>Efectivo (OxxoPay)</h4>
+      </div>
+    </mat-card>
+  </div>
+</main>

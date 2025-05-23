@@ -1,0 +1,101 @@
+.paymentTitle {
+  font-size: 14px !important;
+  margin-bottom: 1rem !important;
+  color: var(--error) !important;
+}
+
+.referenceCont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100vw;
+  height: 100dvh;
+  flex-direction: column;
+}
+
+.optionsRef {
+  width: calc(100% - 1rem);
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.payCont {
+  width: 90% !important;
+}
+
+.icRefType {
+  font-size: 2.5rem !important;
+  width: 3.5rem !important;
+  height: 3.5rem !important;
+}
+
+.innerReferences {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  flex-direction: column;
+
+  h4 {
+    width: 100%;
+    text-align: center !important;
+  }
+}
+
+.cardReference {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.subTitles {
+  color: var(--error) !important;
+}
+
+.resumeReferences {
+  text-align: center !important;
+}
+
+.refCode {
+  text-align: center !important;
+  font-size: 32px !important;
+}
+
+.txtReferences {
+  font-size: 16px !important;
+}
+
+.mat-divider, mat-divider-horizontal {
+  margin: .1rem auto !important;
+}
+
+.buttonRef {
+  h3 {
+    color: var(--colorIcons) !important;
+  }
+}
+
+.codeBarCont {
+  width: 100%;
+  margin: 1rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 50%;
+    height: auto;
+  }
+}
+
+.actionReference {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+}

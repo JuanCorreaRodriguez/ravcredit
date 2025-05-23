@@ -1,0 +1,50 @@
+<main class="minHeight innerPayment">
+
+  @if (paymentsDynamic().length > 0) {
+
+    <section class="screenHeader">
+      <div class="paysHeader">
+        <h3>Historial de pagos</h3>
+        <h4>{{ contract().financial.provider }}</h4>
+        <p cl>Pagos de tu crédito</p>
+
+      </div>
+    </section>
+
+    <div class="wildCardsCont">
+
+      @for (payment of paymentsDynamic(); track payment.id) {
+        <mat-card class="wildCard" (click)="GoDetails(payment)">
+          <div class="dataLeft">
+            <h3 class="itemTitle">{{ payment.name }}</h3>
+          </div>
+
+          <div class="dataRight">
+            <!--            <h4>{{ payment.amount }} MXN</h4>-->
+            @if (payment.credit > 0) {
+              <h4>{{ payment.credit }} MXN</h4>
+              <h4 class="statusBox dynamicPending">Credito</h4>
+            } @else if (payment.debit > 0) {
+              <h4>{{ payment.debit }} MXN</h4>
+              <h4 class="statusBox dynamicActive">Débito</h4>
+            }
+            <p class="dateAnnotation">{{ GetDateTime(payment.created) | titlecase }}</p>
+          </div>
+        </mat-card>
+      }
+    </div>
+
+  } @else {
+
+    <section class="mainCenteredCont notFoundData">
+
+      <mat-icon>playlist_remove</mat-icon>
+
+      <h3>Sin historial de pagos</h3>
+
+      <p>Aún no hay registros o no se pudo recuperar la información.</p>
+
+    </section>
+  }
+
+</main>

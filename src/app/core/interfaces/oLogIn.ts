@@ -30,6 +30,8 @@ export interface iLogIn {
   login(credentials: oAuth, destination: string): Promise<void>
 
   success(): void
+
+  forgotPassword(): void
 }
 
 export interface oAuth {

@@ -8,26 +8,28 @@
   <section class="loginInner">
 
     <div class="_logoCont">
-      <img alt="" fill ngSrc="logo_rev_credit.webp" priority>
+      <img alt="" fill ngSrc="ravcredit_logo.webp" priority>
     </div>
 
     <mat-card>
-      <h2 class="">Inicio de sesión</h2>
-      <p>Panel de administración</p>
+      <h2 class="">Iniciar sesión</h2>
+      <p>Inicia sesión con las credenciales otorgadas por Ravcredit</p>
 
       <form [formGroup]="formLogin()" class="formLogin">
         <mat-form-field>
-          <mat-label>Usuario...</mat-label>
+          <mat-label>Nombre de usuario...</mat-label>
           <input formControlName="username" matInput required>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-label>Escribe tu contraseña...</mat-label>
-          <input [type]="hide() ? 'password' : 'text'" formControlName="password" matInput required/>
+          <mat-label>Contraseña...</mat-label>
+          <input [type]="hide() ? 'password' : 'text'" autocomplete="passowrd-ravcredit" formControlName="password"
+                 matInput required/>
           <button
             (click)="clickEvent($event)"
             [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hide()"
+
             mat-icon-button
             matSuffix
           >
@@ -36,7 +38,8 @@
         </mat-form-field>
 
         @if (logInStatus() != eLoginStatus.CHECKING) {
-          <button class="_btnLogin" mat-flat-button (click)="loginAction()" [disabled]="!formLogin().valid">Continuar
+          <button class="_btnLogin" mat-flat-button (click)="loginAction()" [disabled]="!formLogin().valid">Iniciar
+            sesión
           </button>
         }
 
@@ -50,6 +53,7 @@
   </section>
 
   <div class="versionSignIn">
-    <p>v {{ adminPlatform }}</p>
+    <p (click)="forgotPassword()" class="forgotPass">¿Olvidaste tu contraseña?</p>
+    <p class="versionLabel">v {{ adminPlatform }}</p>
   </div>
 </main>

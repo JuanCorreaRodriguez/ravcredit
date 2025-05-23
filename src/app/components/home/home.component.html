@@ -1,0 +1,116 @@
+<main class="minHeight">
+
+  <div class="headerHome">
+
+    <h3 class="homeTitle">
+      Hola, <br> {{ client().name | titlecase }}
+    </h3>
+
+    <!--    <mat-icon>sync</mat-icon>-->
+
+  </div>
+
+  <p class="welcomeLabel">Bienvenido a Ravcredit</p>
+
+  <section class="progressCont">
+
+    <mat-progress-spinner
+      [diameter]="125"
+      [mode]="mode"
+      [strokeWidth]="12"
+      [value]="100"
+      bac
+      class="progressTrack"
+      style="stroke-linecap: round">
+    </mat-progress-spinner>
+
+    <mat-progress-spinner
+      [diameter]="125"
+      [mode]="mode"
+      [strokeWidth]="12"
+      [value]="progress()"
+      class="progressMain"
+      style="stroke-linecap: round; stroke: #1B1F33">
+    </mat-progress-spinner>
+  </section>
+
+  <section class="progressCont2">
+    <h2>Progreso <strong>{{ progressRound(progress()) }}%</strong></h2>
+    <h3 class="progressPays"><strong>{{ count() }}</strong> /
+      <strong>{{ contract().financial.deadlines.weeks }}</strong>
+      <p>pagos completos</p>
+    </h3>
+
+    @if (isLate()) {
+      <h3 class="statusBox dynamicDenied homeNotsPays">Pagos pendientes</h3>
+    }
+  </section>
+
+  <section class="progressCont2 progressCont3 mt015">
+
+    <mat-card class="globalCard ssa">
+
+      <div class="rowCard">
+        <h4 class="annotation">Nombre</h4>
+        <h4><strong>{{ client().name | titlecase }}</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Equipo</h4>
+        <h4><strong>{{ contract().device.device }}</strong></h4>
+      </div>
+
+    </mat-card>
+
+    <mat-card class="globalCard ssa">
+
+      <div class="rowCard">
+        <h4 class="annotation">Último pago</h4>
+        <h4><strong>{{ lastPayment | titlecase }}</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Próximo pago</h4>
+        <h4><strong>{{ nextPayment | titlecase }}</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Pago semanal</h4>
+        <h4><strong>${{ contract().financial.weeklyPayment }}MXN</strong></h4>
+      </div>
+
+      <mat-divider/>
+
+      <div class="rowCard">
+        <h4 class="annotation">Plazo</h4>
+        <h4><strong>{{ contract().financial.deadlines.weeks }} semanas</strong></h4>
+      </div>
+
+    </mat-card>
+
+    <mat-card class="globalCard ssa">
+
+      <div class="rowCard">
+        <h4 class="annotation">Estado del contrato</h4>
+
+        @if (client().status == eClientStatus.LATE) {
+          <h4 class="statusBox dynamicPending"><strong>Con Atrasado</strong></h4>
+        } @else if (client().status == eClientStatus.PAUSED) {
+          <h4 class="statusBox dynamicIdle"><strong>En Pausa</strong></h4>
+        } @else if (client().status == eClientStatus.CANCELED) {
+          <h4 class="statusBox dynamicPreAuth"><strong>Cancelado</strong></h4>
+        } @else {
+          <h4 class="statusBox dynamicPending"><strong>Activo</strong></h4>
+        }
+      </div>
+
+    </mat-card>
+
+  </section>
+</main>

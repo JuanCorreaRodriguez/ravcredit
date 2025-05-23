@@ -194,7 +194,7 @@ export class FactoryClient {
     contract.address.neighbor = dynamic.pii.colony
 
     /* Financial ------------------------------------------------------ */
-    contract.dynamicAccount = account?.id
+    contract.dynamicAccount = Number(account?.id)
 
     if (account?.config.installments) {
       contract.financial.deadlines = {
@@ -235,7 +235,7 @@ export class FactoryClient {
     account: IDCAccount,
   ): oFinancial {
 
-    contract.dynamicAccount = account.id
+    contract.dynamicAccount = Number(account.id)
 
     if (account.config.installments) {
       contract.financial.deadlines = {

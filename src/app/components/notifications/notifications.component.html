@@ -1,0 +1,23 @@
+<main class="minHeight">
+
+  @if (notification().length > 0) {
+
+    <section class="screenHeader">
+      <div class="paysHeader">
+        <h3>Notificaciónes</h3>
+      </div>
+    </section>
+
+  } @else {
+
+    <section class="mainCenteredCont notFoundData">
+
+      <mat-icon>notifications_off</mat-icon>
+
+      <h3>Sin notificaciones</h3>
+
+      <p>Aún no has recibido notificaciónes o no se pudo recuperar la información.</p>
+
+    </section>
+  }
+</main>

@@ -1,9 +1,9 @@
 import {EnvironmentInjector, inject, Injectable, runInInjectionContext, signal, WritableSignal} from '@angular/core';
 import {oAuth} from '../interfaces/oLogIn';
 import {eLoginStatus, gResponse} from '../interfaces/oGlobal';
-import {ravCreditApiAuth} from '../utils/paths';
+import {ravCreditApiUsers} from '../utils/paths';
 import {dbAuthStore} from '../utils/config';
-import {dbIncorrectPassword, dbUsernameNotFound} from '../utils/messages';
+import {dbIncorrectPassword, dbUsernameClientNotFound, dbUsernameNotFound} from '../utils/messages';
 import {HttpClient} from '@angular/common/http';
 import {IndexedDbService} from '../indexed-db/indexed-db.service';
 import {ErrorHandlerService} from './error-handler.service';
@@ -26,7 +26,7 @@ export class LoginService {
     try {
       this.status.set(eLoginStatus.CHECKING)
 
-      this.httpClient.post(ravCreditApiAuth, {
+      this.httpClient.post(ravCreditApiUsers, {
         "username": credentials.username,
         "password": credentials.password
       }).subscribe({
@@ -35,21 +35,27 @@ export class LoginService {
           const response = e as gResponse
           const data = response.data
 
+          if (response.error) {
+            switch (response.error) {
+              case dbUsernameNotFound:
+                this.status.set(eLoginStatus.NOAUTHORIZED)
+                break
+
+              case dbIncorrectPassword:
+                this.status.set(eLoginStatus.ERRORPASSWORD)
+                break
+
+              case dbUsernameClientNotFound:
+                this.status.set(eLoginStatus.NOTFOUND)
+                break
+            }
+            return
+          }
+
           if (response.status) {
             await this.indexedDbService.dbSignIn(dbAuthStore, data)
             this.status.set(eLoginStatus.AUTHORIZED)
             return
-          }
-
-          switch (response.error) {
-            case dbUsernameNotFound:
-              this.status.set(eLoginStatus.NOAUTHORIZED)
-              break
-
-            case dbIncorrectPassword:
-              this.status.set(eLoginStatus.ERRORPASSWORD)
-              break
-
           }
         },
         error: (err) => {

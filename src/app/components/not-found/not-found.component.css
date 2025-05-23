@@ -59,3 +59,18 @@
   min-width: 100% !important;
   max-width: 100% !important;
 }
+
+
+@media (max-width: 767px) {
+
+  ._logoCont {
+    width: 50vw;
+    height: 50vh;
+  }
+
+  .notFundInner {
+    width: 99vw;
+    height: 100vh;
+    padding: .5rem;
+  }
+}

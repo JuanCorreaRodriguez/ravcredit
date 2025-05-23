@@ -1,6 +1,11 @@
 import {add, format, getDate} from "date-fns";
 import {es} from 'date-fns/locale/es';
 import {oPaymentDates} from "../interfaces/oGlobal";
+import {eProvider} from './UtilContract';
+import {dateCompleteFormat, dateFormat, expiredPayment, timeFormat} from './config';
+import {inject, Injector, runInInjectionContext} from '@angular/core';
+import {IndexedDbService} from '../indexed-db/indexed-db.service';
+import {ObservablesService} from '../services/observables.service';
 
 
 export class UtilTime {
@@ -56,5 +61,76 @@ export class UtilTime {
 
   public static getYear(date: Date | number): string {
     return format(date, "yyyy")
+  }
+
+  public static GetNextPayment(time: number, provider: string) {
+    let week = 0
+    if (provider == eProvider.Conekta) {
+      week = (((3600 * 24) * 7))
+    } else if (provider == eProvider.DynamiCore) {
+      week = (((3600 * 24) * 7) * 1000)
+    }
+    return this.getLocalTimeFromLong(time + week, provider)
+  }
+
+  public static getLocalTimeFromLong(time: number, provider: string) {
+    if (time <= 0) return ""
+    let factor = this.GetFactor(provider)
+    let dateTime = time * factor
+
+    let parsedDate = format(new Date(dateTime), dateFormat, {
+      locale: es
+    })
+
+    return parsedDate
+  }
+
+  public static DelayPaymentLast(
+    lastPayment: number, provider: string, injector: Injector
+  ): boolean {
+    let factor = this.GetFactor(provider)
+    let now = new Date().getTime()
+    let last = 0
+
+    if (provider == eProvider.Conekta)
+      last = (((3600 * 24) * 7) * factor) + lastPayment
+    else if (provider == eProvider.DynamiCore)
+      last = (((3600 * 24) * 7) * 1000) + lastPayment
+
+    runInInjectionContext(injector, () => {
+      const idb = inject(IndexedDbService)
+      const observable = inject(ObservablesService)
+      idb.setLocalStorage(expiredPayment, String(now > last))
+      observable.isLate.next(now > last)
+    })
+
+    return now > last
+  }
+
+  public static GetFactor(provider: string) {
+    let factor = 1
+    if (provider == eProvider.Conekta)
+      factor = 1000
+    return factor
+  }
+
+  public static GetEpochFromFormatedDate(date: string): number {
+    if (date == "") return 0
+
+    const _date = new Date(date)
+    if (isNaN(_date.getTime())) return 0
+    return _date.getTime()
+  }
+
+  public static GetTimeFromString(date: string) {
+    return format(new Date(date), timeFormat, {
+      locale: es
+    })
+  }
+
+  public static GetDateFromString(date: string) {
+    return format(new Date(date), dateCompleteFormat, {
+      locale: es
+    })
   }
 }

@@ -1,1 +1,255 @@
-<p>dashboard works!</p>
+@if (screenWidth < 767) {
+  <main class="dashboardMainCont">
+
+    <div class="optionsHome">
+      <button (click)="changeMenu()" [matMenuTriggerFor]="menu" mat-fab>
+        <mat-icon [ngClass]="menuOpen() ? 'menuOpened' : ''">apps</mat-icon>
+      </button>
+    </div>
+
+    <mat-menu #menu="matMenu">
+      <button (click)="sync()" class="menuItem" mat-menu-item>
+        <mat-icon>sync</mat-icon>
+        <h3>Sincronizar información</h3>
+      </button>
+
+      <!--    <button mat-menu-item>-->
+      <!--      <mat-icon>sync</mat-icon>-->
+      <!--    </button>-->
+    </mat-menu>
+
+    <mat-tab-group (selectedIndexChange)="onTabChange($event)" [selectedIndex]="selectedTabIndex"
+                   headerPosition="below">
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">home</mat-icon>
+        </ng-template>
+
+        @defer (when client().id != '' && contract().id != '') {
+          <app-home [client]="client()" [contract]="contract()" [progress]="progress()" [count]="paymentsCount()"/>
+        } @placeholder {
+          <app-loader/>
+        }
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">schedule</mat-icon>
+        </ng-template>
+
+        @defer (when client().id != '' && contract().id != '') {
+          <app-payments [client]="client()" [contract]="contract()"/>
+        } @placeholder {
+          <app-loader/>
+        }
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">attach_money</mat-icon>
+        </ng-template>
+
+        @defer (when client().id != '' && contract().id != '') {
+          <app-reference [client]="client()" [contract]="contract()" [reference]="dynamicRef()"/>
+        } @placeholder {
+          <app-loader/>
+        }
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">notifications</mat-icon>
+        </ng-template>
+
+        @defer (when client().id != '' && contract().id != '') {
+          <app-notifications [client]="client()" [contract]="contract()" [notification]="notifications()"/>
+        } @placeholder {
+          <app-loader/>
+        }
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">person</mat-icon>
+        </ng-template>
+
+        @defer (when client().id != '' && contract().id != '' && businessConfig().version != '') {
+          <app-contract [client]="client()" [contract]="contract()" [businessInfo]="businessInfo()"
+                        [businessConfig]="businessConfig()"/>
+        } @placeholder {
+          <app-loader/>
+        }
+      </mat-tab>
+
+    </mat-tab-group>
+
+  </main>
+} @else {
+
+  <main class="dashboardExtendedCont">
+
+    <div class="navContainer">
+      <div class="innerShape1">
+
+        <div class="dashActions">
+
+          <div class="navigationHeader">
+            <h3>{{ client().name | titlecase }}</h3>
+            <p>Bienvenido a Racvredit</p>
+          </div>
+
+          <mat-divider/>
+
+          <div class="navigationOptions">
+
+            <div class="navRow" (click)="setTabChange(0)">
+              <mat-icon class="example-tab-icon">home</mat-icon>
+              <h3>Inicio</h3>
+            </div>
+
+            <div class="navRow" (click)="setTabChange(1)">
+              <mat-icon class="example-tab-icon">schedule</mat-icon>
+              <h3>Mis pagos</h3>
+            </div>
+
+            <div class="navRow" (click)="setTabChange(2)">
+              <mat-icon class="example-tab-icon">attach_money</mat-icon>
+              <h3>Referencia</h3>
+            </div>
+
+            <div class="navRow" (click)="setTabChange(3)">
+              <mat-icon class="example-tab-icon">notifications</mat-icon>
+              <h3>Notificaciones</h3>
+            </div>
+
+            <div class="navRow" (click)="setTabChange(4)">
+              <mat-icon class="example-tab-icon">person</mat-icon>
+              <h3>Perfil</h3>
+            </div>
+
+          </div>
+
+          <div class="navigationBottom">
+
+            <div class="navRow">
+              <mat-icon class="icLogOut">logout</mat-icon>
+              <h3>Cerrar sesión</h3>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="innerShape2"></div>
+    </div>
+
+    <div class="navContent">
+
+      @if (selectedTabIndex == 0) {
+        @defer (when client().id != '' && contract().id != '') {
+          <app-home [client]="client()" [contract]="contract()" [progress]="progress()" [count]="paymentsCount()"/>
+        } @placeholder {
+          <app-loader/>
+        }
+      } @else if (selectedTabIndex == 1) {
+
+        @defer (when client().id != '' && contract().id != '') {
+          <app-payments [client]="client()" [contract]="contract()"/>
+        } @placeholder {
+          <app-loader/>
+        }
+
+      } @else if (selectedTabIndex == 2) {
+
+        @defer (when client().id != '' && contract().id != '') {
+          <app-reference [client]="client()" [contract]="contract()" [reference]="dynamicRef()"/>
+        } @placeholder {
+          <app-loader/>
+        }
+
+      } @else if (selectedTabIndex == 3) {
+
+        @defer (when client().id != '' && contract().id != '') {
+          <app-notifications [client]="client()" [contract]="contract()" [notification]="notifications()"/>
+        } @placeholder {
+          <app-loader/>
+        }
+
+      } @else if (selectedTabIndex == 4) {
+
+        @defer (when client().id != '' && contract().id != '' && businessConfig().version != '') {
+          <app-contract [client]="client()" [contract]="contract()" [businessInfo]="businessInfo()"
+                        [businessConfig]="businessConfig()"/>
+        } @placeholder {
+          <app-loader/>
+        }
+
+      }
+
+    </div>
+  </main>
+
+  <!--  <mat-drawer-container class="drawerCont">-->
+    <!--    <mat-drawer #drawer class="sidenav" mode="side" opened>-->
+    <!--      <div class="shape1"></div>-->
+    <!--      &lt;!&ndash; TODO : Add routes&ndash;&gt;-->
+    <!--      <div class="sideNavHeader">-->
+
+    <!--        <div class="sidenavImage">-->
+    <!--          <img alt="" fill ngSrc="ravcredit_logo.webp" priority>-->
+    <!--        </div>-->
+
+    <!--        <mat-divider/>-->
+    <!--        <h3>Bienvenido</h3>-->
+
+    <!--        <mat-divider/>-->
+
+    <!--        <div class="rowSideNav">-->
+
+    <!--          <mat-icon class="example-tab-icon">home</mat-icon>-->
+
+    <!--          <h4>Inicio</h4>-->
+    <!--        </div>-->
+
+    <!--        <div class="rowSideNav">-->
+
+    <!--          <mat-icon class="example-tab-icon">home</mat-icon>-->
+
+    <!--          <h4>Inicio</h4>-->
+    <!--        </div>-->
+
+    <!--        <div class="rowSideNav">-->
+
+    <!--          <mat-icon class="example-tab-icon">home</mat-icon>-->
+
+    <!--          <h4>Inicio</h4>-->
+    <!--        </div>-->
+
+    <!--        <div class="rowSideNav">-->
+
+    <!--          <mat-icon class="example-tab-icon">home</mat-icon>-->
+
+    <!--          <h4>Inicio</h4>-->
+    <!--        </div>-->
+
+    <!--        <div class="rowSideNav">-->
+
+    <!--          <mat-icon class="example-tab-icon">home</mat-icon>-->
+
+    <!--          <h4>Inicio</h4>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </mat-drawer>-->
+
+    <!--    <div class="sidenavCont">-->
+    <!--      <button type="button" mat-button (click)="drawer.toggle()">-->
+    <!--        Toggle sidenav-->
+    <!--      </button>-->
+    <!--    </div>-->
+
+    <!--  </mat-drawer-container>-->
+}
+

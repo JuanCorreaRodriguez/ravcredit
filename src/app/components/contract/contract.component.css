@@ -1,0 +1,29 @@
+.headerContract {
+  margin: 2rem auto 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.customerName {
+  font-size: 24px !important;
+  color: var(--error) !important;
+}
+
+.phoneCont {
+  position: sticky !important;
+  width: 50%;
+  height: 25vh !important;
+  min-height: 25vh !important;
+  max-height: 25vh !important;
+
+  img {
+    object-fit: contain;
+    display: block;
+  }
+}
+
+.cardsContract {
+  margin: 2rem auto 0 auto;
+}

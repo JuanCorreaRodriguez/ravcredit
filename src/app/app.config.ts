@@ -1,7 +1,7 @@
 import {ApplicationConfig, LOCALE_ID, provideZoneChangeDetection} from '@angular/core';
-import {provideRouter, withViewTransitions} from '@angular/router';
+import {provideRouter, withComponentInputBinding, withViewTransitions} from '@angular/router';
 
-import { routes } from './app.routes';
+import {routes} from './app.routes';
 import {provideHttpClient, withFetch} from '@angular/common/http';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
@@ -15,8 +15,12 @@ import {IMAGE_CONFIG, IMAGE_LOADER, ImageLoaderConfig} from '@angular/common';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(withFetch()),
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withViewTransitions()),
+    provideZoneChangeDetection({eventCoalescing: true}),
+    provideRouter(
+      routes,
+      withComponentInputBinding(),
+      withViewTransitions()
+    ),
     provideAnimationsAsync(),
 
     {
