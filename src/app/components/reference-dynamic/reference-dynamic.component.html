@@ -1,5 +1,6 @@
 <app-sub-toolbar [title]="'Referencia Dynamic'"/>
-<main class="minHeight minHeightToolbar">
+
+<main class="minHeight minHeightToolbar referenceContDetail">
 
   <mat-card class="globalCard cardReference">
     <h4 class="subTitles">DynamiCore</h4>
@@ -19,7 +20,7 @@
 
     @if (nextPayment != '') {
       <h4 class="resumeReferences">Fecha del siguiente pago</h4>
-      <h4 class="resumeReferences txtReferences">{{ nextPayment }}</h4>
+      <h4 class="resumeReferences txtReferences">{{ nextPayment | titlecase }}</h4>
     }
 
     <mat-divider/>

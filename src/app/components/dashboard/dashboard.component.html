@@ -1,4 +1,5 @@
-@if (screenWidth < 767) {
+@if (isMobile()) {
+
   <main class="dashboardMainCont">
 
     <div class="optionsHome">
@@ -12,7 +13,6 @@
         <mat-icon>sync</mat-icon>
         <h3>Sincronizar información</h3>
       </button>
-
       <!--    <button mat-menu-item>-->
       <!--      <mat-icon>sync</mat-icon>-->
       <!--    </button>-->
@@ -75,7 +75,8 @@
         </ng-template>
 
         @defer (when client().id != '' && contract().id != '' && businessConfig().version != '') {
-          <app-contract [client]="client()" [contract]="contract()" [businessInfo]="businessInfo()"
+          <app-contract [client]="client()" [isMobile]="isMobile()"
+                        [contract]="contract()" [businessInfo]="businessInfo()"
                         [businessConfig]="businessConfig()"/>
         } @placeholder {
           <app-loader/>
@@ -85,6 +86,7 @@
     </mat-tab-group>
 
   </main>
+
 } @else {
 
   <main class="dashboardExtendedCont">
@@ -103,28 +105,38 @@
 
           <div class="navigationOptions">
 
-            <div class="navRow" (click)="setTabChange(0)">
-              <mat-icon class="example-tab-icon">home</mat-icon>
+            <div [ngClass]="{'icLogOut' : selectedTabIndex == 0 }"
+                 class="navRow" (click)="OnNavigation(0)">
+              <mat-icon class="example-tab-icon">home
+              </mat-icon>
               <h3>Inicio</h3>
             </div>
 
-            <div class="navRow" (click)="setTabChange(1)">
-              <mat-icon class="example-tab-icon">schedule</mat-icon>
+            <div [ngClass]="{'icLogOut' : selectedTabIndex == 1 }"
+                 class="navRow" (click)="OnNavigation(1)">
+              <mat-icon class="example-tab-icon">schedule
+              </mat-icon>
               <h3>Mis pagos</h3>
             </div>
 
-            <div class="navRow" (click)="setTabChange(2)">
-              <mat-icon class="example-tab-icon">attach_money</mat-icon>
+            <div [ngClass]="{'icLogOut' : selectedTabIndex == 2 }"
+                 class="navRow" (click)="OnNavigation(2)">
+              <mat-icon class="example-tab-icon">attach_money
+              </mat-icon>
               <h3>Referencia</h3>
             </div>
 
-            <div class="navRow" (click)="setTabChange(3)">
-              <mat-icon class="example-tab-icon">notifications</mat-icon>
+            <div [ngClass]="{'icLogOut' : selectedTabIndex == 3 }"
+                 class="navRow" (click)="OnNavigation(3)">
+              <mat-icon class="example-tab-icon">notifications
+              </mat-icon>
               <h3>Notificaciones</h3>
             </div>
 
-            <div class="navRow" (click)="setTabChange(4)">
-              <mat-icon class="example-tab-icon">person</mat-icon>
+            <div [ngClass]="{'icLogOut' : selectedTabIndex == 4 }"
+                 class="navRow" (click)="OnNavigation(4)">
+              <mat-icon class="example-tab-icon">person
+              </mat-icon>
               <h3>Perfil</h3>
             </div>
 
@@ -132,8 +144,8 @@
 
           <div class="navigationBottom">
 
-            <div class="navRow">
-              <mat-icon class="icLogOut">logout</mat-icon>
+            <div class="navRow" (click)="signOut()">
+              <mat-icon class="icLogOutB">logout</mat-icon>
               <h3>Cerrar sesión</h3>
             </div>
 
@@ -147,48 +159,50 @@
     </div>
 
     <div class="navContent">
+      <!-- (click)="changeMenu()" -->
+      <div class="secondContainer">
 
-      @if (selectedTabIndex == 0) {
-        @defer (when client().id != '' && contract().id != '') {
-          <app-home [client]="client()" [contract]="contract()" [progress]="progress()" [count]="paymentsCount()"/>
-        } @placeholder {
-          <app-loader/>
+        @if (selectedTabIndex == 0) {
+          @defer (when client().id != '' && contract().id != '') {
+            <app-home [client]="client()" [contract]="contract()" [progress]="progress()" [count]="paymentsCount()"/>
+          } @placeholder {
+            <app-loader/>
+          }
+        } @else if (selectedTabIndex == 1) {
+
+          @defer (when client().id != '' && contract().id != '') {
+            <app-payments [client]="client()" [contract]="contract()"/>
+          } @placeholder {
+            <app-loader/>
+          }
+
+        } @else if (selectedTabIndex == 2) {
+
+          @defer (when client().id != '' && contract().id != '') {
+            <app-reference [client]="client()" [contract]="contract()" [reference]="dynamicRef()"/>
+          } @placeholder {
+            <app-loader/>
+          }
+
+        } @else if (selectedTabIndex == 3) {
+
+          @defer (when client().id != '' && contract().id != '') {
+            <app-notifications [client]="client()" [contract]="contract()" [notification]="notifications()"/>
+          } @placeholder {
+            <app-loader/>
+          }
+
+        } @else if (selectedTabIndex == 4) {
+
+          @defer (when client().id != '' && contract().id != '' && businessConfig().version != '') {
+            <app-contract [client]="client()" [isMobile]="isMobile()"
+                          [contract]="contract()" [businessInfo]="businessInfo()"
+                          [businessConfig]="businessConfig()"/>
+          } @placeholder {
+            <app-loader/>
+          }
         }
-      } @else if (selectedTabIndex == 1) {
-
-        @defer (when client().id != '' && contract().id != '') {
-          <app-payments [client]="client()" [contract]="contract()"/>
-        } @placeholder {
-          <app-loader/>
-        }
-
-      } @else if (selectedTabIndex == 2) {
-
-        @defer (when client().id != '' && contract().id != '') {
-          <app-reference [client]="client()" [contract]="contract()" [reference]="dynamicRef()"/>
-        } @placeholder {
-          <app-loader/>
-        }
-
-      } @else if (selectedTabIndex == 3) {
-
-        @defer (when client().id != '' && contract().id != '') {
-          <app-notifications [client]="client()" [contract]="contract()" [notification]="notifications()"/>
-        } @placeholder {
-          <app-loader/>
-        }
-
-      } @else if (selectedTabIndex == 4) {
-
-        @defer (when client().id != '' && contract().id != '' && businessConfig().version != '') {
-          <app-contract [client]="client()" [contract]="contract()" [businessInfo]="businessInfo()"
-                        [businessConfig]="businessConfig()"/>
-        } @placeholder {
-          <app-loader/>
-        }
-
-      }
-
+      </div>
     </div>
   </main>
 

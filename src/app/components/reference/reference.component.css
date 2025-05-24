@@ -14,6 +14,17 @@
   flex-direction: column;
 }
 
+.referenceContDetail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100vw;
+  height: 100dvh;
+  flex-direction: column;
+
+}
+
 .optionsRef {
   width: calc(100% - 1rem);
   display: flex;
@@ -97,5 +108,29 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
+}
+
+@media (min-width: 800px) {
+
+  .cardReference {
+    width: 50% !important;
+    margin: 0 auto !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .referenceContDetail {
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+    flex-direction: row;
+
+    mat-card {
+      flex: 1 0 50%;
+    }
+  }
 
 }

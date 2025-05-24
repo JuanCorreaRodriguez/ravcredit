@@ -41,14 +41,15 @@ export const routes: Routes = [
     path: "",
     title: "Inicio",
     canActivate: [permissionGuard],
+    outlet: "secondOutlet",
     loadComponent: () => import("./components/dashboard/dashboard.component").then(m => m.DashboardComponent)
   },
-  {
-    path: "**",
-    redirectTo: "404"
-  },
-  {
-    path: "404",
-    loadComponent: () => import("./components/not-found/not-found.component").then(m => m.NotFoundComponent)
-  },
+  // {
+  //   path: "**",
+  //   redirectTo: "404"
+  // },
+  // {
+  //   path: "404",
+  //   loadComponent: () => import("./components/not-found/not-found.component").then(m => m.NotFoundComponent)
+  // },
 ];

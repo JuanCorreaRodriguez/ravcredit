@@ -19,6 +19,7 @@ import {InformativeDialogComponent} from '../../common/informative-dialog/inform
 import {iInformativeDialog} from '../../core/interfaces/oGlobal';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {IndexedDbService} from '../../core/indexed-db/indexed-db.service';
+import {TitleCasePipe} from '@angular/common';
 
 @Component({
   selector: 'app-reference-dynamic',
@@ -28,6 +29,7 @@ import {IndexedDbService} from '../../core/indexed-db/indexed-db.service';
     MatDivider,
     MatButton,
     MatProgressSpinner,
+    TitleCasePipe,
   ],
   templateUrl: './reference-dynamic.component.html',
   styleUrls: ['./reference-dynamic.component.css', '../reference/reference.component.css']

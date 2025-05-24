@@ -91,6 +91,17 @@
   right: 0;
   background: #dfdfdf;
   overflow-y: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.secondContainer {
+  width: calc((100vw - 15rem));
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow-y: auto;
 }
 
 .innerShape1 {
@@ -155,6 +166,10 @@
   display: flex;
   flex-direction: column;
   gap: .5rem;
+
+  h3 {
+    color: var(--error) !important;
+  }
 }
 
 .navigationOptions {
@@ -194,5 +209,15 @@
 }
 
 .icLogOut {
+  border-radius: 1rem !important;
+  background: rgba(186, 26, 26, 0.05) !important;
+
+  .mat-icon {
+    color: var(--error) !important;
+  }
+}
+
+
+.icLogOutB {
   color: var(--error) !important;
 }

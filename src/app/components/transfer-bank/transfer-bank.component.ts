@@ -16,12 +16,14 @@ import {DashboardService} from '../../core/services/dashboard.service';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {IndexedDbService} from '../../core/indexed-db/indexed-db.service';
+import {TitleCasePipe} from '@angular/common';
 
 @Component({
   selector: 'app-transfer-bank',
   imports: [
     SubToolbarComponent,
     MatCard,
+    TitleCasePipe,
   ],
   templateUrl: './transfer-bank.component.html',
   styleUrls: ['./transfer-bank.component.css', '../reference/reference.component.css'],

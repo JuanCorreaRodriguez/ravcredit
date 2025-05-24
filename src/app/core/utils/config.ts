@@ -2,7 +2,7 @@ export const dbVersion: number = 1
 export const configVersion: string = "1.0"
 export const apiVersion: string = "13"
 export const adminVersion: string = "1.0.16"
-export const webAppVersion: string = "1.0.3"
+export const webAppVersion: string = "1.0.4"
 export const dbName: string = "RavCreditDB"
 
 export const dbAuthStore: string = "authStore"

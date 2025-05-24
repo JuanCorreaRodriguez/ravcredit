@@ -26,6 +26,7 @@ export class Dashboard {
   session = signal<string | null>(null)
   progress = signal<number>(0)
   paymentsCount = signal<number>(0)
+  isMobile = signal(true)
 
   dynamicAccount = signal<IDCAccount | null>(null)
   dynamicRef = signal<IDCGeneratedReference | null>(null)

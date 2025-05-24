@@ -37,6 +37,7 @@ import {UtilTime} from '../../core/utils/UtilTime';
 export class ContractComponent {
   client = input.required<oClient>();
   contract = input.required<oContract>()
+  isMobile = input.required<boolean>();
   businessInfo = input.required<oBusinessInfo>()
   businessConfig = input.required<oBusinessConfig>()
 

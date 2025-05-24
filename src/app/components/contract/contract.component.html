@@ -222,14 +222,23 @@
 
     </mat-card>
 
-    <mat-card class="globalCardClear ssa mt010 pb010">
 
-      <div class="rowCard">
-        <h4>Cerrar sesión</h4>
-        <mat-icon (click)="initSignOut()">logout</mat-icon>
-      </div>
+    @if (isMobile()) {
 
-    </mat-card>
+      <mat-card class="globalCardClear ssa mt010 pb010">
+
+        <div class="rowCard">
+          <h4>Cerrar sesión</h4>
+          <mat-icon (click)="initSignOut()">logout</mat-icon>
+        </div>
+
+      </mat-card>
+
+    } @else {
+
+      <div style="height: 1px; width: 100% ;margin: 2.5rem auto 0 auto"></div>
+
+    }
 
   </section>
 </main>

@@ -57,7 +57,6 @@ import {MatDivider} from '@angular/material/divider';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent extends Dashboard implements OnInit, AfterViewInit {
-  isMobile: boolean = false;
   showFiller = false;
   _dialog = inject(MatDialog)
   _snack = inject(MatSnackBar)
@@ -179,7 +178,13 @@ export class DashboardComponent extends Dashboard implements OnInit, AfterViewIn
 
   changeMenu = () => this.menuOpen.set(!this.menuOpen())
 
-  onTabChange(index: number) {
+  OnNavigation(i: number) {
+    this.selectedTabIndex = i
+    let fragment = this.onTabChange(i)
+    this.navMobile(fragment)
+  }
+
+  onTabChange(index: number): string {
     let fragment = '';
     switch (index) {
       case 0:
@@ -197,13 +202,19 @@ export class DashboardComponent extends Dashboard implements OnInit, AfterViewIn
       case 4:
         fragment = 'contract';
         break;
+      default:
+        fragment = 'home'
+        break;
     }
+    return fragment
+  }
+
+  navMobile(fragment: string) {
     this.router.navigate([], {fragment});
   }
 
-  setTabChange = (i: number) => this.selectedTabIndex = i
-
   private getScreenWidth() {
     this.screenWidth = window.innerWidth;
+    this.isMobile.set(this.screenWidth < 900)
   }
 }
