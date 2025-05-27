@@ -6,6 +6,7 @@ import {dateCompleteFormat, dateFormat, expiredPayment, timeFormat} from './conf
 import {inject, Injector, runInInjectionContext} from '@angular/core';
 import {IndexedDbService} from '../indexed-db/indexed-db.service';
 import {ObservablesService} from '../services/observables.service';
+import {IDCTxnRow} from './UtilDynamiCore';
 
 
 export class UtilTime {
@@ -132,5 +133,24 @@ export class UtilTime {
     return format(new Date(date), dateCompleteFormat, {
       locale: es
     })
+  }
+
+  // Quick sort
+  public static SortingByTime(payments: IDCTxnRow[]): IDCTxnRow[] {
+    if (payments.length <= 1) return payments
+
+    const pivot = payments[payments.length - 1]
+    const pivotDate = new Date(pivot.created).getTime()
+    const left: IDCTxnRow[] = []
+    const right: IDCTxnRow[] = []
+
+    for (let i = 0; i < payments.length - 1; i++) {
+      const actualDate = new Date(payments[i].created).getTime()
+      if (actualDate > pivotDate) left.push(payments[i])
+      else right.push(payments[i])
+    }
+
+    return [...this.SortingByTime(left), pivot, ...this.SortingByTime(right)]
+
   }
 }

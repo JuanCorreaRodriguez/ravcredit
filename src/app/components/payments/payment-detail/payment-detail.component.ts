@@ -47,8 +47,6 @@ export class PaymentDetailComponent implements AfterViewInit {
   init(payment: IDCTxnRow | undefined, client: oClient | undefined, contract: oContract | undefined) {
     if (payment != undefined) this.payment.set(payment)
 
-    console.log(payment)
-
     if (client != undefined && client.id != "") this.client.set(client)
 
     if (contract != undefined && contract?.id != "") this.contract.set(contract)
@@ -68,8 +66,6 @@ export class PaymentDetailComponent implements AfterViewInit {
   async GetPayment() {
     await runInInjectionContext(this.injector, async () => {
       const service = inject(DynamicService)
-      console.log('mId', this.id())
-      console.log('ext', this.externalId())
       this.payment.set(await service.getPayment(this.id(), this.externalId()))
     })
   }

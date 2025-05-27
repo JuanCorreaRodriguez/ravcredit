@@ -216,7 +216,7 @@ export class DynamicRepository {
       if (!res.data) return payments
 
       const filtering = this.filterPayments(res.data as IDCTxnRow[])
-      const data: IDCTxnRow[] = filtering()
+      let data: IDCTxnRow[] = filtering()
 
       console.log("getPaymentsApi \n", data)
 

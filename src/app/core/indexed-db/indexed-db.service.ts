@@ -44,7 +44,6 @@ export class IndexedDbService {
     if (('indexedDB' in window)) {
       this.indexDbStatus = true
       this.initDB().then()
-    } else {
     }
   }
 

@@ -50,7 +50,6 @@ export class Dashboard {
 
   async getGlobalData(): Promise<void> {
     let clientContract = await this.dashService.getLocalCustomerData(this.session()!)
-    console.log("getGlobalData", clientContract)
 
     let businessInfo = await this.dashService.GetBusinessInfo()
     let businessConfig = await this.dashService.GetBusinessConfig()
@@ -111,7 +110,8 @@ export class Dashboard {
 
         if (account) {
           this.dynamicAccount.set(await service.getDynamicAccount(account, "id"))
-          await service.getPayments(Number(account))
+          let e = await service.getPayments(Number(account))
+          this.dynamicPays.set(e)
         }
 
         if (reference) {

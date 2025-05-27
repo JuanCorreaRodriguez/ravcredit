@@ -78,6 +78,8 @@ export class DynamicService {
   ): Promise<IDCTxnRow[]> => {
     let pays = await this.dynamicRepository.getPayments(account)
     if (pays.length == 0) pays = await this.dynamicRepository.getPaymentsApi(account)
+    pays = UtilTime.SortingByTime(pays)
+
     this.paymentCount.set(pays.length)
     this.LastTransactionTime(pays)
     return pays
