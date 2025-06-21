@@ -8,6 +8,16 @@ export class ObservablesService {
   constructor() {
   }
 
+  private _ConektaOrdersLoaded: BehaviorSubject<boolean> = new BehaviorSubject(false)
+
+  get ConektaOrdersLoaded(): BehaviorSubject<boolean> {
+    return this._ConektaOrdersLoaded;
+  }
+
+  set ConektaOrdersLoaded(value: BehaviorSubject<boolean>) {
+    this._ConektaOrdersLoaded = value;
+  }
+
   private _DynamicPaymentLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   get DynamicPaymentLoaded(): BehaviorSubject<boolean> {

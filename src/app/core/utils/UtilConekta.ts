@@ -36,9 +36,13 @@ export class FactoryConekta {
     const customer_info: oConektaNewOrderCustomerInfo = {
       customer_id: client.conekta_id
     }
+    const week = ((3600 * 24) * 30) * 1000
+    let next = new Date().getTime() + week
+    next = Math.floor(next / 1000)
+
     const method: oConektaNewOrderPymMethod = {
       type: "cash",
-      expires_at: new Date().getTime() * 1000,
+      expires_at: next,
     }
     const charge: oConektaNewOrderCharge = {
       amount: contract.financial.weeklyPayment * 100,
@@ -76,3 +80,21 @@ export class FactoryConekta {
     return order
   }
 }
+
+// '
+// {
+//   "customer_info": {
+//   "name": "DevTest",
+//     "email": "test@femsa.com",
+//     "phone": "5522997233"
+// },
+//   "currency": "MXN",
+//   "line_items": [
+//   {
+//     "name": "Box of Cohiba S1s",
+//     "quantity": 1,
+//     "unit_price": 20000
+//   }
+// ]
+// }
+// '

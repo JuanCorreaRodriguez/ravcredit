@@ -7,6 +7,7 @@ import {inject, Injector, runInInjectionContext} from '@angular/core';
 import {IndexedDbService} from '../indexed-db/indexed-db.service';
 import {ObservablesService} from '../services/observables.service';
 import {IDCTxnRow} from './UtilDynamiCore';
+import {oConektaOrder} from '../interfaces/oConekta';
 
 
 export class UtilTime {
@@ -78,11 +79,9 @@ export class UtilTime {
     if (time <= 0) return ""
     let factor = this.GetFactor(provider)
     let dateTime = time * factor
-
     let parsedDate = format(new Date(dateTime), dateFormat, {
       locale: es
     })
-
     return parsedDate
   }
 
@@ -94,9 +93,9 @@ export class UtilTime {
     let last = 0
 
     if (provider == eProvider.Conekta)
-      last = (((3600 * 24) * 7) * factor) + lastPayment
+      last = ((((3600 * 24) * 7)) + lastPayment) * factor
     else if (provider == eProvider.DynamiCore)
-      last = (((3600 * 24) * 7) * 1000) + lastPayment
+      last = ((((3600 * 24) * 7) * 1000) + lastPayment) * factor
 
     runInInjectionContext(injector, () => {
       const idb = inject(IndexedDbService)
@@ -151,6 +150,33 @@ export class UtilTime {
     }
 
     return [...this.SortingByTime(left), pivot, ...this.SortingByTime(right)]
+  }
 
+  public static SortingByTimeConekta(payments: oConektaOrder []): oConektaOrder[] {
+    if (payments.length <= 1) return payments;
+
+    const pivot = payments[payments.length - 1]
+    let pivotDate = 0;
+    if (pivot.charges.data == undefined) return payments
+
+    if (pivot.charges.data[0].paid_at != undefined) {
+      pivotDate = pivot.charges.data[0].paid_at
+    } else {
+      pivot.charges.data[0].created_at
+    }
+
+    if (pivotDate <= 0) return payments;
+
+    const left: oConektaOrder[] = []
+    const right: oConektaOrder [] = []
+
+    for (let i = 0; i < payments.length - 1; i++) {
+      const actual = payments[i].charges.data[0].paid_at;
+      if (actual <= 0) continue
+      if (actual > pivotDate) left.push(payments[i])
+      else right.push(payments[i])
+    }
+
+    return [...this.SortingByTimeConekta(left), pivot, ...this.SortingByTimeConekta(right)]
   }
 }

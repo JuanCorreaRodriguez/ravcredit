@@ -18,6 +18,8 @@ import {Router} from '@angular/router';
 import {RoutingParams} from '../../core/utils/globals';
 import {UtilTime} from '../../core/utils/UtilTime';
 import {TitleCasePipe} from '@angular/common';
+import {ConektaService} from '../../core/services/conekta.service';
+import {oConektaOrder} from '../../core/interfaces/oConekta';
 
 @Component({
   selector: 'app-payments',
@@ -33,18 +35,22 @@ export class PaymentComponent implements AfterViewInit {
   client = input.required<oClient>();
   contract = input.required<oContract>()
   paymentsDynamic = signal<IDCTxnRow[]>([])
+
+  paymentsConekta = signal<oConektaOrder[]>([])
   toggleEmptyScreen = false
   injector = inject(EnvironmentInjector)
+  protected readonly eProvider = eProvider;
 
   ngAfterViewInit(): void {
-
     switch (this.contract().financial.provider) {
       case eProvider.DynamiCore:
         if (this.client().dynamic_account)
           this.LoadDynamicPayments(Number(this.client().dynamic_account)).then()
         break
       case eProvider.Conekta:
-        // this.LoadConektaPayments()
+        if (this.client().conekta_id != undefined) {
+          this.LoadConektaPayments(this.client().conekta_id!).then()
+        }
         break
       case eProvider.Passport:
         // this.LoadPassportPayments()
@@ -60,8 +66,12 @@ export class PaymentComponent implements AfterViewInit {
     })
   }
 
-  LoadConektaPayments() {
-
+  async LoadConektaPayments(account: string) {
+    await runInInjectionContext(this.injector, async () => {
+      const service = inject(ConektaService)
+      const _payments = await service.getPayments(account)
+      this.paymentsConekta.set(_payments)
+    })
   }
 
   LoadPassportPayments() {
@@ -83,5 +93,23 @@ export class PaymentComponent implements AfterViewInit {
     // if (external) this.router.navigate([`/payment/${path}/${external}`]);
   }
 
+  async GoDetailsConekta(transaction: oConektaOrder) {
+    await runInInjectionContext(this.injector, async () => {
+      const router = inject(Router)
+      const parms: RoutingParams = {
+        contract: this.contract(),
+        client: this.client(),
+        orderConekta: transaction
+      }
+      await router.navigate(['payment-detail'], {
+        state: parms
+      })
+    })
+    // if (external) this.router.navigate([`/payment/${path}/${external}`]);
+  }
+
   GetDateTime = (date: string) => UtilTime.GetDateFromString(date)
+
+  GetDateTimeLong = (date: number, provider: string) =>
+    UtilTime.getLocalTimeFromLong(date, provider)
 }

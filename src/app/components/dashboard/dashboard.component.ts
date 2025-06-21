@@ -30,6 +30,7 @@ import {NgClass, TitleCasePipe} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {eProvider} from '../../core/utils/UtilContract';
 import {MatDivider} from '@angular/material/divider';
+import {ReferenceConektaComponent} from '../reference-conekta/reference-conekta.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -51,6 +52,7 @@ import {MatDivider} from '@angular/material/divider';
     NgClass,
     TitleCasePipe,
     MatDivider,
+    ReferenceConektaComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -68,6 +70,7 @@ export class DashboardComponent extends Dashboard implements OnInit, AfterViewIn
   selectedTabIndex = 0
   screenWidth: number;
   menuOpen = signal(false)
+  protected readonly eProvider = eProvider;
 
   constructor() {
     super();
@@ -139,8 +142,15 @@ export class DashboardComponent extends Dashboard implements OnInit, AfterViewIn
 
     this.observables.DynamicPaymentLoaded.subscribe((e) => {
       if (e && this.contract().financial.provider == eProvider.DynamiCore) {
-        this.checkProvider()
         this.observables.DynamicPaymentLoaded.next(false)
+        this.checkProvider()
+      }
+    })
+
+    this.observables.ConektaOrdersLoaded.subscribe((e) => {
+      if (e && this.contract().financial.provider == eProvider.Conekta) {
+        this.observables.ConektaOrdersLoaded.next(false)
+        this.checkProvider()
       }
     })
   }

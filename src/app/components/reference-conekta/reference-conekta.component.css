@@ -1,0 +1,23 @@
+.codeBarConekta {
+  width: 100%;
+  margin: 1rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 50%;
+    height: auto;
+  }
+}
+
+.subTitles {
+  text-align: center;
+  font-size: 13px !important;
+}
+
+@media (max-width: 800px) {
+  .codeBarConekta {
+    width: 95% !important;
+  }
+}

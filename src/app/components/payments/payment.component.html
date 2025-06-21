@@ -1,6 +1,6 @@
 <main class="minHeight innerPayment">
 
-  @if (paymentsDynamic().length > 0) {
+  @if (paymentsDynamic().length > 0 && !toggleEmptyScreen) {
 
     <section class="screenHeader">
       <div class="paysHeader">
@@ -32,6 +32,42 @@
           </div>
         </mat-card>
       }
+
+    </div>
+
+  } @else if (paymentsConekta().length > 0 && !toggleEmptyScreen) {
+
+
+    <section class="screenHeader">
+      <div class="paysHeader">
+        <h3>Historial de pagos</h3>
+        <h4>{{ contract().financial.provider }}</h4>
+        <p cl>Pagos de tu crédito</p>
+
+      </div>
+    </section>
+
+    <div class="wildCardsCont">
+
+      @for (payment of paymentsConekta(); track payment.id) {
+        <mat-card class="wildCard" (click)="GoDetailsConekta(payment)">
+          <div class="dataLeft">
+            <h3 class="itemTitle">{{ payment.line_items.data[0].name | titlecase }}</h3>
+          </div>
+
+          <div class="dataRight">
+            <!--                        <h4>{{ payment.amount }} MXN</h4>-->
+            <h4>$ {{ payment.amount / 100 }} {{ payment.currency }}</h4>
+            @if (payment.payment_status == 'pending_payment') {
+              <h4 class="statusBox dynamicPending">Pago pendiente</h4>
+            } @else {
+              <h4 class="statusBox dynamicActive">Pagado</h4>
+            }
+            <p class="dateAnnotation">{{ GetDateTimeLong(payment.updated_at, eProvider.Conekta) | titlecase }}</p>
+          </div>
+        </mat-card>
+      }
+
     </div>
 
   } @else {

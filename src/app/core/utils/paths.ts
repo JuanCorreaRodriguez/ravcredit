@@ -4,7 +4,7 @@ const prefix = "/api/v1/"
 const prodApiDev = "https://ravcredit-api-1059462239029.us-central1.run.app"
 const prodApi2 = "https://ravcredit-api-2imgfxveka-uc.a.run.app"
 
-export const ravCreditApi = prodApiDev + prefix
+export const ravCreditApi = localApiDev + prefix
 /* Functions */
 export const notificationsFun = "http://customernotification-2imgfxveka-uc.a.run.app"
 export const testOnRegisterFun = "http://127.0.0.1:5001/ravcredit-2b079/us-central1/onRegister"

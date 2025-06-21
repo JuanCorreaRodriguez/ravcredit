@@ -9,10 +9,11 @@ import {DashboardService} from '../../../core/services/dashboard.service';
 import {oContract} from '../../../core/interfaces/oContract';
 import {RouteData} from '../../../core/utils/globals';
 import {oClient} from '../../../core/interfaces/oClient';
-import {cContract} from '../../../core/utils/UtilContract';
+import {cContract, eProvider} from '../../../core/utils/UtilContract';
 import {cClient} from '../../../core/utils/UtilClient';
 import {UtilTime} from '../../../core/utils/UtilTime';
 import {TitleCasePipe} from '@angular/common';
+import {oConektaOrder} from '../../../core/interfaces/oConekta';
 
 @Component({
   selector: 'app-payment-detail',
@@ -33,19 +34,37 @@ export class PaymentDetailComponent implements AfterViewInit {
 
   id = signal("")
   externalId = signal("")
-  payment = signal<IDCTxnRow | null>(null)
+  paymentDynamic = signal<IDCTxnRow | null>(null)
+  paymentConekta = signal<oConektaOrder | null>(null)
   contract = signal<oContract>(cContract)
   client = signal<oClient>(cClient)
+  protected readonly eProvider = eProvider;
 
   constructor() {
     let _contract = this.dashboardService.GetDataFromRoute<oContract>(this.router, RouteData.CONTRACT)
     let _client = this.dashboardService.GetDataFromRoute<oClient>(this.router, RouteData.CLIENT)
-    let _payment = this.dashboardService.GetDataFromRoute<IDCTxnRow>(this.router, RouteData.PAYMENT_DYNAMIC)
-    this.init(_payment, _client, _contract)
+    if (_contract?.financial.provider == eProvider.DynamiCore) {
+
+      let _payment = this.dashboardService.GetDataFromRoute<IDCTxnRow>(this.router, RouteData.PAYMENT_DYNAMIC)
+      this.init(_payment!, null, _client, _contract)
+
+    } else if (_contract?.financial.provider == eProvider.Conekta) {
+
+      let _payment = this.dashboardService.GetDataFromRoute<oConektaOrder>(this.router, RouteData.PAYMENT_CONEKTA)
+      this.init(null, _payment!, _client, _contract)
+
+    }
   }
 
-  init(payment: IDCTxnRow | undefined, client: oClient | undefined, contract: oContract | undefined) {
-    if (payment != undefined) this.payment.set(payment)
+  init(
+    paymentDynamic: IDCTxnRow | null,
+    paymentConekta: oConektaOrder | null,
+    client: oClient | undefined,
+    contract: oContract | undefined
+  ) {
+    if (paymentDynamic != undefined) this.paymentDynamic.set(paymentDynamic)
+
+    if (paymentConekta != undefined) this.paymentConekta.set(paymentConekta)
 
     if (client != undefined && client.id != "") this.client.set(client)
 
@@ -66,12 +85,28 @@ export class PaymentDetailComponent implements AfterViewInit {
   async GetPayment() {
     await runInInjectionContext(this.injector, async () => {
       const service = inject(DynamicService)
-      this.payment.set(await service.getPayment(this.id(), this.externalId()))
+      this.paymentDynamic.set(await service.getPayment(this.id(), this.externalId()))
     })
   }
 
-  GetDateTime(): string {
-    if (this.payment()?.created) return UtilTime.GetDateFromString(this.payment()?.created!);
+  GetDateTimeDynamic(): string {
+    if (this.paymentDynamic()?.created) return UtilTime.GetDateFromString(this.paymentDynamic()?.created!);
     return ""
+  }
+
+  GetDateTimeConekta(): string {
+    if (this.paymentConekta()?.updated_at)
+      return UtilTime.getLocalTimeFromLong(this.paymentConekta()?.updated_at!, eProvider.Conekta);
+    return ""
+  }
+
+  GetNameOrder = (): string => {
+    let name = this.paymentConekta()?.line_items!.data[0]!.name
+    return name != undefined ? name : ""
+  }
+
+  GetServiceConekta = (): string => {
+    let service = this.paymentConekta()?.charges.data[0].payment_method.service_name
+    return service != undefined ? service : "";
   }
 }

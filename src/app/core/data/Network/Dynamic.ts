@@ -95,8 +95,6 @@ export class DynamicRepository {
       const bodyReference =
         FactoryDynamiCore.CreateReferenceBody(client, contract, dateTime)
 
-      console.log("bodyReference", bodyReference)
-
       if (!bodyReference) return null
 
       const response = await firstValueFrom(
@@ -217,8 +215,6 @@ export class DynamicRepository {
 
       const filtering = this.filterPayments(res.data as IDCTxnRow[])
       let data: IDCTxnRow[] = filtering()
-
-      console.log("getPaymentsApi \n", data)
 
       if (data.length > 0) payments = data
 

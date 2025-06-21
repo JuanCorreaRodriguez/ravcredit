@@ -17,6 +17,8 @@ import {IDCGeneratedReference} from '../utils/UtilDynamiCore';
 import {cClient} from '../utils/UtilClient';
 import {NotificationService} from './notification.service';
 import {oNotification} from '../interfaces/oNotification';
+import {oConektaOrder} from '../interfaces/oConekta';
+import {ConektaService} from './conekta.service';
 
 @Injectable({
   providedIn: 'root'
@@ -87,6 +89,13 @@ export class DashboardService {
     })
   }
 
+  async GetOrderConekta(account: string): Promise<oConektaOrder> {
+    return await runInInjectionContext(this.injector, async () => {
+      let service = inject(ConektaService)
+      return service.getOrder(account)
+    })
+  }
+
   GetDataFromRoute<T>(router: Router, type: RouteData): T | undefined {
     let data: RoutingParams = router.getCurrentNavigation()?.extras.state as RoutingParams
 
@@ -110,9 +119,11 @@ export class DashboardService {
       case RouteData.PAYMENT_DYNAMIC:
         return data.paymentDynamic as T
 
+      case RouteData.PAYMENT_CONEKTA:
+        return data.orderConekta as T
+
       default:
         return undefined
-
     }
   }
 

@@ -459,6 +459,7 @@ export class IndexedDbService {
     if (!k) return
 
     await this.iDb.delete(dbAuthStore, k)
+    indexedDB.deleteDatabase(dbName)
     this.removeLocalStorage(keyUserID)
   }
 

@@ -1,69 +1,84 @@
-import {EnvironmentInjector, inject, Injectable, runInInjectionContext} from '@angular/core';
-import {oClient, oClientReferences} from '../interfaces/oClient';
-import {oConektaNewOrder, oConektaOrder} from '../interfaces/oConekta';
+import {EnvironmentInjector, inject, Injectable, runInInjectionContext, signal} from '@angular/core';
+import {oClient} from '../interfaces/oClient';
+import {oConektaOrder} from '../interfaces/oConekta';
 import {HttpClient} from '@angular/common/http';
 import {IndexedDbService} from '../indexed-db/indexed-db.service';
 import {oContract} from '../interfaces/oContract';
-import {FactoryConekta} from '../utils/UtilConekta';
-import {ravApiConektaCreateOrder} from '../utils/paths';
-import {UtilsHttp} from '../utils/UtilsHttp';
-import {catchError, firstValueFrom} from 'rxjs';
-import {gResponse} from '../interfaces/oGlobal';
-import {dbClientsStore} from '../utils/config';
+import {lastPayment} from '../utils/config';
 import {ErrorHandlerService} from './error-handler.service';
+import {UtilTime} from '../utils/UtilTime';
+import {ConektaRepository} from '../data/Network/Conekta';
+import {eProvider} from '../utils/UtilContract';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConektaService {
 
+  status = signal<string>("")
+  paymentCount = signal<number>(0)
+
   constructor(
     private readonly httpClient: HttpClient,
     private readonly indexedDbService: IndexedDbService,
-    private readonly injector: EnvironmentInjector
+    private readonly injector: EnvironmentInjector,
+    private readonly conektaRepository: ConektaRepository,
+    private readonly iDb: IndexedDbService
   ) {
   }
 
-  async createOrder(
-    client: oClient,
-    contract: oContract,
-    access_token: string,
-    dateTime?: number
-  ): Promise<boolean> {
-
-    try {
-      const data: oConektaNewOrder = FactoryConekta.createOrder(client, contract, dateTime)
-      const url = `${ravApiConektaCreateOrder}`
-      const headers = UtilsHttp.CreateHeadersApi(access_token)
-
-      const snap = await firstValueFrom(
-        this.httpClient.post(url, JSON.stringify(data), {
-          headers: headers
-        }).pipe(
-          catchError(err => this.catchingError(err))
-        )
-      ) //ord_2xgQfKcbTCUUNntfR
-      const res = snap as gResponse
-      if (res == undefined) return false
-      return this.saveReferenceLocally(res.data, client)
-
-    } catch (e) {
-      await this.catchingError(e)
-      return false
-    }
+  async getOrder(account: string): Promise<oConektaOrder> {
+    let pays = await this.conektaRepository.getPayments(account)
+    if (pays.length == 0) pays = await this.conektaRepository.getPaymentsApi(account)
+    pays = UtilTime.SortingByTimeConekta(pays)
+    return pays[0]
   }
 
-  async saveReferenceLocally(order: oConektaOrder, client: oClient): Promise<boolean> {
-    const amount = order.charges.data[0].amount
-    const date = order.charges.data[0].created_at
-    const id = order.charges.data[0].order_id
+  getPayments = async (
+    account: string
+  ): Promise<oConektaOrder[]> => {
+    let pays = await this.conektaRepository.getPayments(account)
+    if (pays.length == 0) pays = await this.conektaRepository.getPaymentsApi(account)
+    pays = UtilTime.SortingByTimeConekta(pays)
 
-    const referenceH: oClientReferences = {
-      amount: amount, date: date, id: id
+    this.paymentCount.set(pays.length)
+    this.LastTransactionTime(pays)
+    return pays
+  }
+
+  LastTransactionTime(payments: oConektaOrder[]): void {
+    let time = 0
+    for (let pay of payments) {
+
+      let paidAt = 0
+
+      if (pay.payment_status == "pending_payment")
+        paidAt = pay.charges.data[0].created_at
+      else
+        paidAt = pay.charges.data[0].paid_at
+
+      // let eLast = UtilTime.GetEpochFromFormatedDate(paidAt)
+      if (paidAt > time) time = paidAt - ((3600 * 1000) * 6)
+      time = Math.max(time, paidAt)
     }
-    client.references?.push(referenceH)
-    client.reference = order.charges.data[0].payment_method.reference
-    return await this.indexedDbService.AddObject<oClient>(dbClientsStore, client)
+    this.iDb.setLocalStorage(lastPayment, String(time))
+    UtilTime.DelayPaymentLast(time, eProvider.Conekta, this.injector)
+  }
+
+  async initConektaCreateOrder(
+    client: oClient,
+    contract: oContract
+  ): Promise<oClient | null> {
+
+    if (client.references != null && client.references.length > 0) {
+      let last = client.references.length - 1
+      if (client.references[last].date) {
+        // return this.dynamicRepository.initDynamicCreateReference(client, contract, client.references[last].date)
+        return await this.conektaRepository.createConektaOrderRef(client, contract, client.references[last].date)
+      }
+    }
+    return await this.conektaRepository.createConektaOrderRef(client, contract)
+    // return this.dynamicRepository.initDynamicCreateReference(client, contract)
   }
 
   async catchingError(err: any) {

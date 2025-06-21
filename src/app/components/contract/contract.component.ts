@@ -82,7 +82,6 @@ export class ContractComponent {
 
   GoToSignIn() {
     runInInjectionContext(this.injector, () => {
-      console.log("before goToSignIn")
       const route = inject(Router)
       route.navigate(["/sign-in"]).then()
     })

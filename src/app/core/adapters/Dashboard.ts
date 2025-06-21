@@ -7,15 +7,18 @@ import {cContract, eProvider, FactoryContract} from '../utils/UtilContract';
 import {oBusinessConfig, oBusinessInfo} from '../interfaces/oBusiness';
 import {DynamicService} from '../services/dynamic.service';
 import {IDCAccount, IDCGeneratedReference, IDCTxnRow} from '../utils/UtilDynamiCore';
-import {oConektaRes} from '../interfaces/oConekta';
+import {oConektaOrder, oConektaRes} from '../interfaces/oConekta';
 import {ConektaService} from '../services/conekta.service';
 import {PassportService} from '../services/passport.service';
 import {cClient, FactoryClient} from '../utils/UtilClient';
 import {cBusinessConfig, cBusinessInfo} from '../utils/UtilBusiness';
 import {oNotification} from '../interfaces/oNotification';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {snackBarConfigNoAction} from '../interfaces/oGlobal';
 
 export class Dashboard {
   dashService = inject(DashboardService)
+  snack = inject(MatSnackBar);
   iDB = inject(IndexedDbService)
   count = 0
 
@@ -32,6 +35,7 @@ export class Dashboard {
   dynamicRef = signal<IDCGeneratedReference | null>(null)
   dynamicPays = signal<IDCTxnRow[]>([])
 
+  conektaPays = signal<oConektaOrder[]>([])
   conektaAccount = signal<oConektaRes | null>(null)
 
   notifications = signal<oNotification[]>([])
@@ -128,10 +132,22 @@ export class Dashboard {
     })
   }
 
-  async conektaProvider(id: string) {
+  async conektaProvider(id: string, sync?: boolean) {
     await runInInjectionContext(this.injector, async () => {
       let service = inject(ConektaService)
 
+      if (sync) {
+
+      } else {
+        if (this.client().conekta_id != undefined) {
+          let e = await service.getPayments(this.client().conekta_id!)
+          if (e.length == 0) {
+            this.snack.open("No se pudo recuperar tu información", "", snackBarConfigNoAction)
+            return
+          }
+          this.conektaPays.set(e)
+        }
+      }
     })
   }
 

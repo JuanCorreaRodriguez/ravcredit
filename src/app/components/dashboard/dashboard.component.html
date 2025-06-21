@@ -50,10 +50,22 @@
           <mat-icon class="example-tab-icon">attach_money</mat-icon>
         </ng-template>
 
-        @defer (when client().id != '' && contract().id != '') {
-          <app-reference [client]="client()" [contract]="contract()" [reference]="dynamicRef()"/>
-        } @placeholder {
-          <app-loader/>
+        @if (contract().financial.provider == eProvider.DynamiCore) {
+
+          @defer (when client().id != '' && contract().id != '') {
+            <app-reference [client]="client()" [contract]="contract()" [reference]="dynamicRef()"/>
+          } @placeholder {
+            <app-loader/>
+          }
+
+        } @else if (contract().financial.provider == eProvider.Conekta) {
+
+          @defer (when client().id != '' && contract().id != '' && client().conekta_id != undefined) {
+            <app-reference-conekta [id]="client().id"/>
+          } @placeholder {
+            <app-loader/>
+          }
+
         }
       </mat-tab>
 
@@ -178,10 +190,23 @@
 
         } @else if (selectedTabIndex == 2) {
 
-          @defer (when client().id != '' && contract().id != '') {
-            <app-reference [client]="client()" [contract]="contract()" [reference]="dynamicRef()"/>
-          } @placeholder {
-            <app-loader/>
+
+          @if (contract().financial.provider == eProvider.DynamiCore) {
+
+            @defer (when client().id != '' && contract().id != '') {
+              <app-reference [client]="client()" [contract]="contract()" [reference]="dynamicRef()"/>
+            } @placeholder {
+              <app-loader/>
+            }
+
+          } @else if (contract().financial.provider == eProvider.Conekta) {
+
+            @defer (when client().id != '' && contract().id != '' && client().conekta_id != undefined) {
+              <app-reference-conekta [id]="client().id"/>
+            } @placeholder {
+              <app-loader/>
+            }
+
           }
 
         } @else if (selectedTabIndex == 3) {

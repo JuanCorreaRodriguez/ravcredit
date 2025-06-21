@@ -68,14 +68,14 @@
 
       <div class="rowCard">
         <h4 class="annotation">Último pago</h4>
-        <h4><strong>{{ lastPayment | titlecase }}</strong></h4>
+        <h4><strong>{{ lastPayment() | titlecase }}</strong></h4>
       </div>
 
       <mat-divider/>
 
       <div class="rowCard">
         <h4 class="annotation">Próximo pago</h4>
-        <h4><strong>{{ nextPayment | titlecase }}</strong></h4>
+        <h4><strong>{{ nextPayment() | titlecase }}</strong></h4>
       </div>
 
       <mat-divider/>

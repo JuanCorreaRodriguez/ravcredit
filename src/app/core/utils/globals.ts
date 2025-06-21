@@ -4,6 +4,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {oContract} from '../interfaces/oContract';
 import {oClient} from '../interfaces/oClient';
 import {IDCTxnRow} from './UtilDynamiCore';
+import {oConektaOrder} from '../interfaces/oConekta';
 
 export const cResponseErrorData: oResponse = {
   data: []
@@ -15,11 +16,12 @@ export type RoutingParams = {
   id?: string,
   external_id?: string,
   reference?: string,
-  paymentDynamic?: IDCTxnRow
+  paymentDynamic?: IDCTxnRow,
+  orderConekta?: oConektaOrder
 }
 
 export enum RouteData {
-  CLIENT, CONTRACT, REFERENCE, ID, EXTERNAL_ID, PAYMENT_DYNAMIC
+  CLIENT, CONTRACT, REFERENCE, ID, EXTERNAL_ID, PAYMENT_DYNAMIC, PAYMENT_CONEKTA
 }
 
 export const emailContact = "contact@ravcredit.com"
