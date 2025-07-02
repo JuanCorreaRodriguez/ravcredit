@@ -22,6 +22,7 @@ export class ConektaRepository {
   private readonly httpClient: HttpClient = inject(HttpClient);
   private readonly injector: EnvironmentInjector = inject(EnvironmentInjector);
   private readonly indexedDbService: IndexedDbService = inject(IndexedDbService);
+  private readonly observables: ObservablesService = inject(ObservablesService);
 
   async getPayment(id: string) {
     return await this.indexedDbService.GetObject<oConektaOrdersResponse>(dbPaymentsStore, id)
@@ -52,6 +53,7 @@ export class ConektaRepository {
   async getPaymentsApi(account: string): Promise<oConektaOrder[]> {
     let payments: oConektaOrder[] = []
     try {
+      console.log("getPaymentsApi")
       const access_token = await this.indexedDbService.GetToken()
       const headers = {
         headers: UtilsHttp.CreateHeadersApi(access_token)
@@ -67,26 +69,19 @@ export class ConektaRepository {
 
       const res = snap as gResponse
       if (!res.data) return payments
+      console.log(res)
 
-      // const filtering = this.filterPayments(res.data as IDCTxnRow[])
-      // let data: IDCTxnRow[] = filtering()
-      let data = res.data
-
+      const filtering = this.filterPayments(res.data as oConektaOrder[])
+      let data: oConektaOrder[] = filtering()
+      // let data = res.data
       if (data.length > 0) payments = data
 
       await this.saveLocalPayments(data)
-      // await this.OrdersLoaded(true)
+      this.observables.ConektaOrdersLoaded.next(data.length > 0)
     } catch (e) {
       console.log("Catch error payment api", e)
     }
     return payments
-  }
-
-  async OrdersLoaded(val: boolean) {
-    runInInjectionContext(this.injector, () => {
-      const service = inject(ObservablesService)
-      service.ConektaOrdersLoaded.next(val)
-    })
   }
 
   async createConektaOrderRef(
@@ -176,13 +171,14 @@ export class ConektaRepository {
   /* Create customer reference */
   async catchingError(err: any) {
     // this.status.set("")
+    console.error(err)
     runInInjectionContext(this.injector, () => {
       const errorService = inject(ErrorHandlerService)
       errorService.httpError(err)
     })
   }
 
-  async saveLocalPayments(payments: oConektaOrdersResponse[]) {
+  async saveLocalPayments(payments: oConektaOrder[]) {
     try {
       await this.indexedDbService.AddAllObjects(dbPaymentsStore, payments)
     } catch (e) {
@@ -190,27 +186,20 @@ export class ConektaRepository {
     }
   }
 
-  filterPayments(payments: IDCTxnRow[]): () => IDCTxnRow[] {
-    const data: IDCTxnRow[] = []
+  filterPayments(payments: oConektaOrder[]): () => oConektaOrder[] {
+    const data: oConektaOrder[] = []
     let memory: Map<string, string> = new Map()
 
-    return function (): IDCTxnRow[] {
+    return function (): oConektaOrder[] {
       for (const payment of payments) {
-        const key = payment.id
-
-        if (memory.has(key)) continue
-
-        if (
-          (payment.name.includes("SPEI") || payment.name.includes("Pago de Amortización")) &&
-          payment.debit > 0
-        ) {
+        if (payment.line_items.data.length > 0) {
+          payment.line_items.data[0].name = "Pago en Efectivo";
           data.push(payment)
           memory.set(payment.id, payment.id)
         }
       }
 
       return data
-
     }
   }
 

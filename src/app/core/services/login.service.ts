@@ -27,7 +27,7 @@ export class LoginService {
       this.status.set(eLoginStatus.CHECKING)
 
       this.httpClient.post(ravCreditApiUsers, {
-        "username": credentials.username,
+        "username": String(credentials.username),
         "password": credentials.password
       }).subscribe({
         next: async (e) => {

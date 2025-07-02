@@ -2,6 +2,24 @@
 
 }
 
+.paysHeader {
+  h3 {
+    color: var(--primary) !important;
+  }
+}
+
+.itemTitle2 {
+  color: var(--primary) !important;
+}
+
 .innerPayment {
   /*overflow: auto !important;*/
 }
+
+
+::ng-deep .mat-mdc-icon-button {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+

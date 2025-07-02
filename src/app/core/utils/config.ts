@@ -2,7 +2,7 @@ export const dbVersion: number = 1
 export const configVersion: string = "1.0"
 export const apiVersion: string = "13"
 export const adminVersion: string = "1.0.16"
-export const webAppVersion: string = "1.0.6"
+export const webAppVersion: string = "1.0.9"
 export const dbName: string = "RavCreditDB"
 
 export const dbAuthStore: string = "authStore"
@@ -57,6 +57,10 @@ export const mobileVersion = "3.1.5"
 // LERG880515MNLYMD05
 
 
-// fanileyton42@gmail.com
+// d38c2c89-5161-43e6-a42d-f7abc1df022d
+// fanileyton42@gmail.com  // 8184670072
 // mABP9209*
 // LERG880515MNLYMD05
+
+// uber1893@gmail.com // 8138665690
+// gUHA9210*

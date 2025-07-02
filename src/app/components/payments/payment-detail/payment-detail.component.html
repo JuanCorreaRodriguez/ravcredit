@@ -75,34 +75,18 @@
   } @else if (contract().financial.provider == eProvider.Conekta && paymentConekta()) {
 
     <section class="paymentInner">
-      <mat-card class="globalCard progressCont2">
-        <h2>
-          Información
-        </h2>
 
-        <mat-divider/>
-
-        @if (GetNameOrder() != '') {
-
-          <div class="rowCard">
-            <h4 class="annotation">Nombre</h4>
-            <h4><strong>{{ GetNameOrder() | titlecase }}</strong></h4>
-          </div>
-
-          <mat-divider/>
-        }
-
-        <div class="rowCard">
-          <h4 class="annotation">Referencia/Orden actual</h4>
-          <h4><strong>{{ client().reference }}</strong></h4>
+      @if (GetConektaUrlCode() != '') {
+        <div class="imgContainer">
+          <img [src]="GetConektaUrlCode()" alt=""/>
         </div>
+      }
 
-      </mat-card>
+      <mat-card class="globalCard progressCont2">
 
-      <mat-card class="globalCard">
         <div class="rowCard">
-          <h4 class="annotation">Monto</h4>
-          <h4><strong>$ {{ paymentConekta()?.amount! / 100 }} {{ paymentConekta()?.currency }}</strong></h4>
+          <h4 class="annotation">Cantidad</h4>
+          <h4><strong>{{ paymentConekta()?.amount! / 100 }}</strong></h4>
         </div>
 
         <mat-divider/>
@@ -114,24 +98,56 @@
 
         <mat-divider/>
 
+
         <div class="rowCard">
           <h4 class="annotation">Fecha</h4>
           <h4><strong>{{ GetDateTimeConekta() | titlecase }}</strong></h4>
+        </div>
+
+
+      </mat-card>
+
+      <mat-card class="globalCard progressCont2">
+
+        @if (GetNameStore() != '') {
+
+          <div class="rowCard">
+            <h4 class="annotation">Tienda</h4>
+            <h4><strong>{{ GetNameStore() }}</strong></h4>
+          </div>
+
+          <mat-divider/>
+        }
+
+        <div class="rowCard">
+          <h4 class="annotation">Referencia/Orden actual</h4>
+          <h4><strong>{{ client().reference }}</strong></h4>
         </div>
 
         @if (GetServiceConekta() != '') {
           <mat-divider/>
 
           <div class="rowCard">
-            <h4 class="annotation">Servicio</h4>
+            <h4 class="annotation">Nombre de servicio</h4>
             <h4><strong>{{ GetServiceConekta() }}</strong></h4>
           </div>
         }
 
-        <mat-divider/>
+        @if (GetIdStore() != '') {
+          <mat-divider/>
+
+          <div class="rowCard">
+            <h4 class="annotation">Id de tienda</h4>
+            <h4><strong>{{ GetIdStore() }}</strong></h4>
+          </div>
+        }
+
+      </mat-card>
+
+      <mat-card class="globalCard progressCont2">
 
         <div class="rowCard">
-          <h4 class="annotation">Fecha</h4>
+          <h4 class="annotation">Status de orden de pago</h4>
 
           @if (paymentConekta()?.payment_status == 'pending_payment') {
             <h4 class="statusBox dynamicPending">Pago pendiente</h4>

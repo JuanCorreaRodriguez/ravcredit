@@ -19,6 +19,7 @@ import {NotificationService} from './notification.service';
 import {oNotification} from '../interfaces/oNotification';
 import {oConektaOrder} from '../interfaces/oConekta';
 import {ConektaService} from './conekta.service';
+import {eProvider} from '../utils/UtilContract';
 
 @Injectable({
   providedIn: 'root'
@@ -129,11 +130,13 @@ export class DashboardService {
 
   GetLastPayment(provider: string) {
     let _lastPayment = Number(this.idbService.getLocalStorage<number>(lastPayment))
+    if (provider == eProvider.Conekta) _lastPayment /= 1000
     return UtilTime.getLocalTimeFromLong(_lastPayment, provider)
   }
 
   GetNextPayment(contract: oContract): string {
     let _lastPayment = Number(this.idbService.getLocalStorage<number>(lastPayment))
+    if (contract.financial.provider == eProvider.Conekta) _lastPayment /= 1000
     if (_lastPayment <= 0) return ''
     return UtilTime.GetNextPayment(_lastPayment, contract.financial.provider)
   }

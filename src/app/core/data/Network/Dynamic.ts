@@ -210,7 +210,6 @@ export class DynamicRepository {
       )
 
       const res = snap as gResponse
-
       if (!res.data) return payments
 
       const filtering = this.filterPayments(res.data as IDCTxnRow[])
@@ -240,6 +239,9 @@ export class DynamicRepository {
           (payment.name.includes("SPEI") || payment.name.includes("Pago de Amortización")) &&
           payment.debit > 0
         ) {
+          if (payment.name.includes("Pago de Amortización"))
+            payment.name = "Pago en Efectivo"
+
           data.push(payment)
           memory.set(payment.id, payment.id)
         }

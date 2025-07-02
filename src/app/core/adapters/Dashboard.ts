@@ -148,6 +148,12 @@ export class Dashboard {
           this.conektaPays.set(e)
         }
       }
+
+      this.progress.set(
+        this.dashService.GetProgressDynamic(service.paymentCount(), this.contract().financial.deadlines.weeks)
+      )
+      this.paymentsCount.set(service.paymentCount())
+
     })
   }
 

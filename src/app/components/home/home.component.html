@@ -19,9 +19,8 @@
       [mode]="mode"
       [strokeWidth]="12"
       [value]="100"
-      bac
       class="progressTrack"
-      style="stroke-linecap: round">
+      style="stroke-linecap: round; stroke: #2d3456 !important;">
     </mat-progress-spinner>
 
     <mat-progress-spinner
@@ -30,12 +29,12 @@
       [strokeWidth]="12"
       [value]="progress()"
       class="progressMain"
-      style="stroke-linecap: round; stroke: #1B1F33">
+      style="stroke-linecap: round; stroke: #FF2B6E">
     </mat-progress-spinner>
   </section>
 
   <section class="progressCont2">
-    <h2>Progreso <strong>{{ progressRound(progress()) }}%</strong></h2>
+    <h2 class="progressHome">Progreso <strong>{{ progressRound(progress()) }}%</strong></h2>
     <h3 class="progressPays"><strong>{{ count() }}</strong> /
       <strong>{{ contract().financial.deadlines.weeks }}</strong>
       <p>pagos completos</p>

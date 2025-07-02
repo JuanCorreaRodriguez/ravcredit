@@ -16,7 +16,7 @@
 .homeTitle {
   text-align: center;
   font-size: 24px !important;
-  color: var(--error) !important;
+  color: var(--primary) !important;
 }
 
 .welcomeLabel {
@@ -40,7 +40,7 @@
   z-index: 0;
 
   ::ng-deep circle {
-    stroke: #FFD8E480 !important;
+    stroke: rgba(255, 43, 110, 0.15) !important;
   }
 }
 
@@ -51,6 +51,14 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 0;
+
+  ::ng-deep circle {
+    stroke: rgba(255, 43, 110, 1) !important;
+  }
+}
+
+.progressHome {
+  color: var(--primary) !important;
 }
 
 .progressCont2 {
@@ -76,6 +84,7 @@
   align-items: baseline;
   flex-direction: row;
   gap: 0.1rem;
+  color: var(--primary) !important;
 
   p {
     font-size: 13px !important;
@@ -86,3 +95,7 @@
 .homeNotsPays {
   margin-top: .5rem !important;
 }
+
+/*::ng-deep .mat-mdc-progress-spinner .mdc-circular-progress__determinate-circle, .mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-circle-graphic {*/
+/*  stroke: #2d3456 !important;*/
+/*}*/

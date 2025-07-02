@@ -29,7 +29,7 @@ body {
 }
 
 .titleToolbar {
-  color: var(--error) !important;
+  color: var(--primary) !important;
   width: 100% !important;
   max-width: 100% !important;
 }
@@ -131,12 +131,6 @@ p, span {
     justify-content: center;
     color: var(--colorP) !important;
   }
-}
-
-.mat-mdc-icon-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .mat-vertical-content {
@@ -541,7 +535,7 @@ main {
 
 .globalSubtitle {
   margin: 1rem auto !important;
-  color: var(--error) !important;
+  color: var(--primary) !important;
 }
 
 .globalWidth {
@@ -634,10 +628,11 @@ main {
     width: 62px !important;
     height: 62px !important;
     font-size: 60px !important;
-    color: var(--error) !important;
+    color: var(--primary) !important;
   }
 
   h3 {
+    color: var(--primary) !important;
     font-size: 16px !important;
   }
 }

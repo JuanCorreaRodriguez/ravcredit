@@ -6,6 +6,9 @@
   opacity: .25;
 }
 
+::ng-deep .mat-mdc-tab .mdc-tab-indicator__content--underline {
+  border-color: var(--secondary) !important;
+}
 
 .dashboardMainCont {
   width: 100vw;

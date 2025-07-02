@@ -4,10 +4,10 @@ import {oConektaOrder} from '../interfaces/oConekta';
 import {HttpClient} from '@angular/common/http';
 import {IndexedDbService} from '../indexed-db/indexed-db.service';
 import {oContract} from '../interfaces/oContract';
-import {lastPayment} from '../utils/config';
 import {ErrorHandlerService} from './error-handler.service';
 import {UtilTime} from '../utils/UtilTime';
 import {ConektaRepository} from '../data/Network/Conekta';
+import {lastPayment} from '../utils/config';
 import {eProvider} from '../utils/UtilContract';
 
 @Injectable({
@@ -34,6 +34,10 @@ export class ConektaService {
     return pays[0]
   }
 
+  async getPaymentLocal(account: string) {
+    return await this.conektaRepository.getPayments(account)
+  }
+
   getPayments = async (
     account: string
   ): Promise<oConektaOrder[]> => {
@@ -41,7 +45,11 @@ export class ConektaService {
     if (pays.length == 0) pays = await this.conektaRepository.getPaymentsApi(account)
     pays = UtilTime.SortingByTimeConekta(pays)
 
-    this.paymentCount.set(pays.length)
+    let count = 0;
+
+    for (let pay of pays) if (pay.payment_status == "paid") count++
+
+    this.paymentCount.set(count)
     this.LastTransactionTime(pays)
     return pays
   }
@@ -57,11 +65,12 @@ export class ConektaService {
       else
         paidAt = pay.charges.data[0].paid_at
 
-      // let eLast = UtilTime.GetEpochFromFormatedDate(paidAt)
-      if (paidAt > time) time = paidAt - ((3600 * 1000) * 6)
-      time = Math.max(time, paidAt)
+      let t = (paidAt - ((3600 * 1000) * 6))
+      time = Math.max(t, paidAt)
+      time *= 1000
     }
-    this.iDb.setLocalStorage(lastPayment, String(time))
+    this.indexedDbService.removeLocalStorage(lastPayment)
+    this.indexedDbService.setLocalStorage(lastPayment, String(time))
     UtilTime.DelayPaymentLast(time, eProvider.Conekta, this.injector)
   }
 

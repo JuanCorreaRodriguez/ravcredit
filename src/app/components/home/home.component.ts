@@ -43,7 +43,6 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.setTimes()
-
     this.subsLate = this.observables.isLate.subscribe((isLate) => {
       this.isLate.set(isLate);
       this.setTimes()

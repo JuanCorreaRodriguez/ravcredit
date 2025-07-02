@@ -5,8 +5,7 @@
     <section class="screenHeader">
       <div class="paysHeader">
         <h3>Historial de pagos</h3>
-        <h4>{{ contract().financial.provider }}</h4>
-        <p cl>Pagos de tu crédito</p>
+        <p>Pagos de tu crédito</p>
 
       </div>
     </section>
@@ -16,7 +15,7 @@
       @for (payment of paymentsDynamic(); track payment.id) {
         <mat-card class="wildCard" (click)="GoDetails(payment)">
           <div class="dataLeft">
-            <h3 class="itemTitle">{{ payment.name }}</h3>
+            <h3 class="itemTitle2">{{ payment.name }}</h3>
           </div>
 
           <div class="dataRight">
@@ -37,12 +36,10 @@
 
   } @else if (paymentsConekta().length > 0 && !toggleEmptyScreen) {
 
-
     <section class="screenHeader">
       <div class="paysHeader">
         <h3>Historial de pagos</h3>
-        <h4>{{ contract().financial.provider }}</h4>
-        <p cl>Pagos de tu crédito</p>
+        <p>Pagos de tu crédito</p>
 
       </div>
     </section>
@@ -52,7 +49,7 @@
       @for (payment of paymentsConekta(); track payment.id) {
         <mat-card class="wildCard" (click)="GoDetailsConekta(payment)">
           <div class="dataLeft">
-            <h3 class="itemTitle">{{ payment.line_items.data[0].name | titlecase }}</h3>
+            <h3 class="itemTitle2">{{ payment.line_items.data[0].name | titlecase }}</h3>
           </div>
 
           <div class="dataRight">

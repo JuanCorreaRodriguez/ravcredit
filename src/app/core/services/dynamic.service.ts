@@ -101,6 +101,7 @@ export class DynamicService {
       if (eLast > time) time = eLast - ((3600 * 1000) * 6)
     }
     this.iDb.setLocalStorage(lastPayment, String(time))
+    //1750719999000
     UtilTime.DelayPaymentLast(time, eProvider.DynamiCore, this.injector)
   }
 

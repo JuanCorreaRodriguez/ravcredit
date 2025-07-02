@@ -109,4 +109,19 @@ export class PaymentDetailComponent implements AfterViewInit {
     let service = this.paymentConekta()?.charges.data[0].payment_method.service_name
     return service != undefined ? service : "";
   }
+
+  GetConektaUrlCode = (): string => {
+    let url = this.paymentConekta()?.charges.data[0].payment_method.barcode_url
+    return url != undefined ? url : ""
+  }
+
+  GetIdStore = (): string => {
+    let id = this.paymentConekta()?.charges.data[0].payment_method.store
+    return id == undefined ? "" : id
+  }
+
+  GetNameStore = (): string => {
+    let name = this.paymentConekta()?.charges.data[0].payment_method.store_name
+    return name == undefined ? "" : name
+  }
 }

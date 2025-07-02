@@ -69,6 +69,10 @@
   justify-self: center !important;
 }
 
+.SignIn, .instSignIn {
+  color: var(--primary) !important;
+}
+
 @media (max-width: 767px) {
   .loginInner {
     width: 98vw;
@@ -114,6 +118,12 @@
     font-size: 12px !important;
     margin-bottom: 1rem !important;
     text-align: center !important;
+    color: var(--primary) !important;
   }
 }
 
+.phoneField {
+  .mdc-text-field--outlined .mdc-text-field__input, .mat-mdc-form-field-error, span {
+    font-weight: 500 !important;
+  }
+}

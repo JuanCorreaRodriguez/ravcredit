@@ -12,13 +12,14 @@
     </div>
 
     <mat-card>
-      <h2 class="">Iniciar sesión</h2>
-      <p>Inicia sesión con las credenciales otorgadas por Ravcredit</p>
+      <h2 class="SignIn">Iniciar sesión</h2>
+      <p class="instSignIn">Inicia sesión con las credenciales otorgadas por Ravcredit</p>
 
       <form [formGroup]="formLogin()" class="formLogin">
-        <mat-form-field>
-          <mat-label>Nombre de usuario...</mat-label>
-          <input formControlName="username" matInput required>
+        <mat-form-field class="phoneField">
+          <span matTextPrefix>+52 &nbsp;</span>
+          <mat-label>Número de teléfono...</mat-label>
+          <input formControlName="username" matInput required type="number">
         </mat-form-field>
 
         <mat-form-field>

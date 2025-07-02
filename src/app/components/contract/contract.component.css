@@ -8,7 +8,7 @@
 
 .customerName {
   font-size: 24px !important;
-  color: var(--error) !important;
+  color: var(--primary) !important;
 }
 
 .phoneCont {

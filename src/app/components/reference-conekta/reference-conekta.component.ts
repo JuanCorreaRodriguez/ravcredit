@@ -64,7 +64,7 @@ export class ReferenceConektaComponent implements AfterViewInit {
     this.contract.set(_contract)
 
     this.nextPayment = this.dashboardService.GetNextPayment(_contract)
-    await this.getReference()
+    // await this.getReference()
   }
 
   async getReference() {
@@ -134,7 +134,7 @@ export class ReferenceConektaComponent implements AfterViewInit {
           duration: 5000,
         })
       }
-      console.log("createeRRef")
+      console.log("createRef")
       this.generating.set(false)
     })
   }

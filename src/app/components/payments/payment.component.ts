@@ -4,6 +4,7 @@ import {
   EnvironmentInjector,
   inject,
   input,
+  OnDestroy,
   runInInjectionContext,
   signal
 } from '@angular/core';
@@ -20,6 +21,8 @@ import {UtilTime} from '../../core/utils/UtilTime';
 import {TitleCasePipe} from '@angular/common';
 import {ConektaService} from '../../core/services/conekta.service';
 import {oConektaOrder} from '../../core/interfaces/oConekta';
+import {Subscription} from 'rxjs';
+import {ObservablesService} from '../../core/services/observables.service';
 
 @Component({
   selector: 'app-payments',
@@ -31,14 +34,16 @@ import {oConektaOrder} from '../../core/interfaces/oConekta';
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css', '../dashboard/dashboard.component.css']
 })
-export class PaymentComponent implements AfterViewInit {
+export class PaymentComponent implements AfterViewInit, OnDestroy {
   client = input.required<oClient>();
   contract = input.required<oContract>()
   paymentsDynamic = signal<IDCTxnRow[]>([])
+  observables = inject(ObservablesService)
 
   paymentsConekta = signal<oConektaOrder[]>([])
   toggleEmptyScreen = false
   injector = inject(EnvironmentInjector)
+  paymentsLoaded = new Subscription()
   protected readonly eProvider = eProvider;
 
   ngAfterViewInit(): void {
@@ -56,6 +61,14 @@ export class PaymentComponent implements AfterViewInit {
         // this.LoadPassportPayments()
         break
     }
+
+    this.paymentsLoaded = this.observables.ConektaOrdersLoaded.subscribe((e) => {
+      if (e) this.LoadConektaPayments(this.client().conekta_id!).then()
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.paymentsLoaded.unsubscribe()
   }
 
   async LoadDynamicPayments(account: number) {
@@ -69,7 +82,7 @@ export class PaymentComponent implements AfterViewInit {
   async LoadConektaPayments(account: string) {
     await runInInjectionContext(this.injector, async () => {
       const service = inject(ConektaService)
-      const _payments = await service.getPayments(account)
+      const _payments = await service.getPaymentLocal(account)
       this.paymentsConekta.set(_payments)
     })
   }
